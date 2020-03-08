@@ -1,6 +1,8 @@
 package com.tim.auth.service.impl;
 
 import com.tim.auth.ao.TokenModel;
+import com.tim.auth.component.RequestManager;
+import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
@@ -11,6 +13,7 @@ import com.tim.auth.vo.LoginResp;
 import com.tim.message.Message;
 import java.util.List;
 import java.util.UUID;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tim.auth.ao.ResourceUser;
@@ -24,6 +27,12 @@ public class AccessServiceImpl implements AccessService {
 
   @Autowired
   private TokenManager tokenManager;
+
+  @Autowired
+  private ResourceManager resourceManager;
+
+  @Autowired
+  private RequestManager requestManager;
 
   @Override
   public Message<LoginResp> login(LoginReq loginReq) {
@@ -53,25 +62,44 @@ public class AccessServiceImpl implements AccessService {
   }
 
   @Override
-  public Message logout(String token) {
+  public Message logout() {
+    String token = requestManager.getAccessToken();
     tokenManager.deleteToken(token);
     return Message.success();
   }
 
   @Override
-  public Message<TokenModel> profile(String token) {
+  public Message<TokenModel> profile() {
+    String token = requestManager.getAccessToken();
     TokenModel tokenModel = tokenManager.getTokenModel(token);
     return Message.success(tokenModel);
   }
 
   @Override
-  public Message check(String token) {
+  public Message check() {
+    String token = requestManager.getAccessToken();
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
-      return Message.error("token失效！");
+      return Message.error("token无效！");
     }
 
     return Message.success();
+  }
+
+  @Override
+  public Message checkPermission() {
+    String requestURI = requestManager.getRequestURI();// 请求的资源
+    if (StringUtils.isEmpty(requestURI)) {
+      return Message.error("请求路径为空！");
+    }
+
+    String token = requestManager.getAccessToken();
+    boolean isExist = tokenManager.checkToken(token);
+    if (!isExist) {
+      return Message.error("token无效！");
+    }
+
+    return resourceManager.checkPermission(requestURI, token);
   }
 
   @Override

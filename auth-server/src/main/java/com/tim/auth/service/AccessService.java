@@ -11,11 +11,13 @@ public interface AccessService {
 
   Message<LoginResp> login(LoginReq loginReq);
 
-  Message logout(String token);
+  Message logout();
 
-  Message<TokenModel> profile(String token);
+  Message<TokenModel> profile();
 
-  Message check(String token);
+  Message check();
+
+  Message checkPermission();
 
   /**
    * 加载权限和角色

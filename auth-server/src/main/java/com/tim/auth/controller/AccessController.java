@@ -2,6 +2,7 @@ package com.tim.auth.controller;
 
 import com.tim.auth.ao.TokenModel;
 import com.tim.auth.component.RequestManager;
+import com.tim.auth.component.ResourceManager;
 import com.tim.auth.service.AccessService;
 import com.tim.auth.vo.LoginReq;
 import com.tim.auth.vo.LoginResp;
@@ -28,9 +29,6 @@ public class AccessController {
   @Autowired
   private AccessService accessService;
 
-  @Autowired
-  private RequestManager requestManager;
-
   @ApiOperation(value = "登录")
   @PostMapping("/login")
   public Message<LoginResp> login(LoginReq loginReq) {
@@ -40,22 +38,25 @@ public class AccessController {
   @ApiOperation(value = "退出", notes = "需要登录,token放入Header中")
   @GetMapping("/logout")
   public Message logout() {
-    String token = requestManager.getAccessToken();
-    return accessService.logout(token);
+    return accessService.logout();
   }
 
   @ApiOperation(value = "通过token查自己信息", notes = "需要登录,token放入Header中")
   @GetMapping("/profile")
   public Message<TokenModel> profile() {
-    String token = requestManager.getAccessToken();
-    return accessService.profile(token);
+    return accessService.profile();
   }
 
   @ApiOperation(value = "检查token是否有效", notes = "需要登录,token放入Header中")
   @GetMapping("/check")
   public Message check() {
-    String token = requestManager.getAccessToken();
-    return accessService.check(token);
+    return accessService.check();
+  }
+
+  @ApiOperation(value = "检查是否有权限", notes = "需要登录,token放入Header中")
+  @GetMapping("/permission")
+  public Message checkPermission() {
+    return accessService.checkPermission();
   }
 
 }

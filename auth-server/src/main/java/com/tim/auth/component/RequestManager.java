@@ -30,4 +30,12 @@ public class RequestManager {
 
     return token.trim();
   }
+
+  /**
+   * 获取当前请求的资源路径
+   */
+  public String getRequestURI() {
+    return request.getRequestURI();
+  }
+
 }
