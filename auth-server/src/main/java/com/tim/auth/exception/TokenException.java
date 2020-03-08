@@ -7,9 +7,9 @@ import com.tim.exception.CommonException;
  * @date：20-3-1 下午9:37
  * @description：
  */
-public class NullTokenException extends CommonException {
+public class TokenException extends CommonException {
 
-  public NullTokenException(String msg) {
-    super(msg);
+  public TokenException(String msg) {
+    super("Token错误：" + msg);
   }
 }

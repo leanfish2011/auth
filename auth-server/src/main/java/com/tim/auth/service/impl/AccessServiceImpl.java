@@ -4,6 +4,7 @@ import com.tim.auth.ao.TokenModel;
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
+import com.tim.auth.exception.TokenException;
 import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
 import com.tim.auth.po.UserExample.Criteria;
@@ -71,7 +72,14 @@ public class AccessServiceImpl implements AccessService {
   @Override
   public Message<TokenModel> profile() {
     String token = requestManager.getAccessToken();
+    if (StringUtils.isEmpty(token)) {
+      return Message.error("token为空！");
+    }
     TokenModel tokenModel = tokenManager.getTokenModel(token);
+    if (tokenModel == null) {
+      return Message.error("未找到用户信息！");
+    }
+
     return Message.success(tokenModel);
   }
 
