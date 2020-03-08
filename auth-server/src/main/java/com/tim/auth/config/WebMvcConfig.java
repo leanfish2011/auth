@@ -1,7 +1,7 @@
-package com.tim.auth.sdk.config;
+package com.tim.auth.config;
 
-import com.tim.auth.sdk.interceptor.LoginInterceptor;
-import com.tim.auth.sdk.interceptor.ResourceInterceptor;
+import com.tim.auth.interceptor.LoginInterceptor;
+import com.tim.auth.interceptor.ResourceInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

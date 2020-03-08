@@ -1,7 +1,8 @@
-package com.tim.auth.sdk.interceptor;
+package com.tim.auth.interceptor;
 
-import com.tim.auth.sdk.feign.AccountFeignClient;
-import com.tim.auth.sdk.util.ResponseUtil;
+import com.tim.auth.component.RequestManager;
+import com.tim.auth.service.AccessService;
+import com.tim.auth.util.ResponseUtil;
 import com.tim.message.MainCode;
 import com.tim.message.Message;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 public class ResourceInterceptor implements HandlerInterceptor {
 
   @Autowired
-  private AccountFeignClient accountFeignClient;
+  private RequestManager requestManager;
+
+  @Autowired
+  private AccessService accessService;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
-    Message message = accountFeignClient.permission();
+    Message message = accessService.checkPermission(requestManager.getRequestURI());
     if (message.getCode() == MainCode.SUCCESS) {
       return true;
     }

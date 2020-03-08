@@ -4,7 +4,6 @@ import com.tim.auth.ao.TokenModel;
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
-import com.tim.auth.exception.TokenException;
 import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
 import com.tim.auth.po.UserExample.Criteria;
@@ -65,6 +64,10 @@ public class AccessServiceImpl implements AccessService {
   @Override
   public Message logout() {
     String token = requestManager.getAccessToken();
+    if (StringUtils.isEmpty(token)) {
+      return Message.error("token为空！");
+    }
+
     tokenManager.deleteToken(token);
     return Message.success();
   }
@@ -75,6 +78,7 @@ public class AccessServiceImpl implements AccessService {
     if (StringUtils.isEmpty(token)) {
       return Message.error("token为空！");
     }
+
     TokenModel tokenModel = tokenManager.getTokenModel(token);
     if (tokenModel == null) {
       return Message.error("未找到用户信息！");
@@ -86,18 +90,21 @@ public class AccessServiceImpl implements AccessService {
   @Override
   public Message check() {
     String token = requestManager.getAccessToken();
+    if (StringUtils.isEmpty(token)) {
+      return Message.error("token为空！");
+    }
+
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
       return Message.error("token无效！");
     }
 
-    return Message.success();
+    return Message.success(true);
   }
 
   @Override
-  public Message checkPermission() {
-    String requestURI = requestManager.getRequestURI();// 请求的资源
-    if (StringUtils.isEmpty(requestURI)) {
+  public Message checkPermission(String uri) {
+    if (StringUtils.isEmpty(uri)) {
       return Message.error("请求路径为空！");
     }
 
@@ -107,7 +114,7 @@ public class AccessServiceImpl implements AccessService {
       return Message.error("token无效！");
     }
 
-    return resourceManager.checkPermission(requestURI, token);
+    return resourceManager.checkPermission(uri, token);
   }
 
   @Override

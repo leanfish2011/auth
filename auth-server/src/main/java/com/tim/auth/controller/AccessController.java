@@ -9,8 +9,10 @@ import com.tim.auth.vo.LoginResp;
 import com.tim.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,9 +56,9 @@ public class AccessController {
   }
 
   @ApiOperation(value = "检查是否有权限", notes = "需要登录,token放入Header中")
-  @GetMapping("/permission")
-  public Message checkPermission() {
-    return accessService.checkPermission();
+  @RequestMapping(value = "/permission/{uri}", method = RequestMethod.GET)
+  public Message checkPermission(@PathVariable String uri) {
+    return accessService.checkPermission(uri);
   }
 
 }

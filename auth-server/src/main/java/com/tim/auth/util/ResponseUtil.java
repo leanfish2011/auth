@@ -1,4 +1,4 @@
-package com.tim.auth.sdk.util;
+package com.tim.auth.util;
 
 import com.alibaba.fastjson.JSON;
 import com.tim.message.Message;
