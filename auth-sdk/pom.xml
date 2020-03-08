@@ -14,7 +14,7 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <dependencies>
-    
+
     <dependency>
       <groupId>com.tim</groupId>
       <artifactId>dev-core</artifactId>
