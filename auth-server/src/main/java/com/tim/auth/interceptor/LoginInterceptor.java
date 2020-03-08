@@ -1,9 +1,9 @@
 package com.tim.auth.interceptor;
 
 import com.tim.auth.service.AccessService;
-import com.tim.auth.util.ResponseUtil;
 import com.tim.message.MainCode;
 import com.tim.message.Message;
+import com.tim.util.ResponseUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

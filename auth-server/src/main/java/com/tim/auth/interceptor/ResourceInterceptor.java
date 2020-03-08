@@ -2,7 +2,7 @@ package com.tim.auth.interceptor;
 
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.service.AccessService;
-import com.tim.auth.util.ResponseUtil;
+import com.tim.util.ResponseUtil;
 import com.tim.message.MainCode;
 import com.tim.message.Message;
 import javax.servlet.http.HttpServletRequest;
