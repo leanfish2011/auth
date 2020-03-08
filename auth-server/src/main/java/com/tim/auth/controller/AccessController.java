@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,8 +57,8 @@ public class AccessController {
   }
 
   @ApiOperation(value = "检查是否有权限", notes = "需要登录,token放入Header中")
-  @RequestMapping(value = "/permission/{uri}", method = RequestMethod.GET)
-  public Message checkPermission(@PathVariable String uri) {
+  @RequestMapping(value = "/permission", method = RequestMethod.GET)
+  public Message checkPermission(@RequestParam(value = "uri") String uri) {
     return accessService.checkPermission(uri);
   }
 
