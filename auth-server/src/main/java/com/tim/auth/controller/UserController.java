@@ -57,7 +57,7 @@ public class UserController {
 
   @ApiOperation(value = "修改用户")
   @RequestMapping(method = RequestMethod.PUT)
-  public Message update(UserUpdate userUpdate) {
+  public Message update(@RequestBody UserUpdate userUpdate) {
     return userService.update(userUpdate);
   }
 
