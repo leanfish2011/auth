@@ -8,12 +8,15 @@ import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
 import com.tim.auth.po.UserExample.Criteria;
 import com.tim.auth.service.AccessService;
+import com.tim.auth.service.UserService;
 import com.tim.auth.vo.LoginReq;
 import com.tim.auth.vo.LoginResp;
+import com.tim.auth.vo.RegisterReq;
 import com.tim.message.Message;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tim.auth.ao.ResourceUser;
@@ -34,6 +37,9 @@ public class AccessServiceImpl implements AccessService {
   @Autowired
   private RequestManager requestManager;
 
+  @Autowired
+  private UserService userService;
+
   @Override
   public Message<LoginResp> login(LoginReq loginReq) {
     UserExample example = new UserExample();
@@ -52,8 +58,9 @@ public class AccessServiceImpl implements AccessService {
 
     LoginResp loginResp = new LoginResp();
     loginResp.setToken(UUID.randomUUID().toString());
-    loginResp.setUserCode(user.getUsercode());
+    loginResp.setUserCode(user.getUserCode());
     loginResp.setUserId(user.getId());
+    loginResp.setName(user.getName());
 
     //redis存储
     tokenManager.saveTokenModel(loginResp);
@@ -85,6 +92,27 @@ public class AccessServiceImpl implements AccessService {
     }
 
     return Message.success(tokenModel);
+  }
+
+  @Override
+  public Message register(RegisterReq registerReq) {
+    boolean isExist = userService.isExist(registerReq.getUserCode());
+    if (isExist) {
+      return Message.error("该用户名已经存在！");
+    }
+
+    User user = new User();
+    BeanUtils.copyProperties(registerReq, user);
+    String userId = UUID.randomUUID().toString();
+    user.setId(userId);
+    user.setCreatorId(registerReq.getUserCode());
+
+    // 字段有值，则插入
+    if (userMapper.insertSelective(user) == 1) {
+      return Message.success();
+    } else {
+      return Message.error();
+    }
   }
 
   @Override

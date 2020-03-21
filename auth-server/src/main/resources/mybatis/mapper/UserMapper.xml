@@ -8,7 +8,7 @@
 		<result column="modified_time" property="modifiedTime"
 			jdbcType="TIMESTAMP" />
 		<result column="modifier_id" property="modifierId" jdbcType="VARCHAR" />
-		<result column="usercode" property="usercode" jdbcType="VARCHAR" />
+		<result column="usercode" property="userCode" jdbcType="VARCHAR" />
 		<result column="password" property="password" jdbcType="VARCHAR" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
@@ -131,7 +131,7 @@
 		(#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{creatorId,jdbcType=VARCHAR},
 		#{modifiedTime,jdbcType=TIMESTAMP},
-		#{modifierId,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR},
+		#{modifierId,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR},
 		#{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
 		#{email,jdbcType=VARCHAR},
 		#{photourl,jdbcType=VARCHAR},
@@ -155,7 +155,7 @@
 			<if test="modifierId != null">
 				modifier_id,
 			</if>
-			<if test="usercode != null">
+			<if test="userCode != null">
 				usercode,
 			</if>
 			<if test="password != null">
@@ -190,8 +190,8 @@
 			<if test="modifierId != null">
 				#{modifierId,jdbcType=VARCHAR},
 			</if>
-			<if test="usercode != null">
-				#{usercode,jdbcType=VARCHAR},
+			<if test="userCode != null">
+				#{userCode,jdbcType=VARCHAR},
 			</if>
 			<if test="password != null">
 				#{password,jdbcType=VARCHAR},
@@ -236,8 +236,8 @@
 			<if test="record.modifierId != null">
 				modifier_id = #{record.modifierId,jdbcType=VARCHAR},
 			</if>
-			<if test="record.usercode != null">
-				usercode = #{record.usercode,jdbcType=VARCHAR},
+			<if test="record.userCode != null">
+				usercode = #{record.userCode,jdbcType=VARCHAR},
 			</if>
 			<if test="record.password != null">
 				password = #{record.password,jdbcType=VARCHAR},
@@ -272,7 +272,7 @@
 		modifier_id =
 		#{record.modifierId,jdbcType=VARCHAR},
 		usercode =
-		#{record.usercode,jdbcType=VARCHAR},
+		#{record.userCode,jdbcType=VARCHAR},
 		password =
 		#{record.password,jdbcType=VARCHAR},
 		name =
@@ -302,8 +302,8 @@
 			<if test="modifierId != null">
 				modifier_id = #{modifierId,jdbcType=VARCHAR},
 			</if>
-			<if test="usercode != null">
-				usercode = #{usercode,jdbcType=VARCHAR},
+			<if test="userCode != null">
+				usercode = #{userCode,jdbcType=VARCHAR},
 			</if>
 			<if test="password != null">
 				password = #{password,jdbcType=VARCHAR},
@@ -334,7 +334,7 @@
 		modifier_id =
 		#{modifierId,jdbcType=VARCHAR},
 		usercode =
-		#{usercode,jdbcType=VARCHAR},
+		#{userCode,jdbcType=VARCHAR},
 		password = #{password,jdbcType=VARCHAR},
 		name = #{name,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},

@@ -2,10 +2,14 @@ package com.tim.auth.vo;
 
 import lombok.Data;
 
+/**
+ * @author：tim
+ * @date：20-3-21 下午8:54
+ * @description：
+ */
 @Data
-public class UserUpdate {
+public class RegisterReq {
 
-  private String id;
   private String userCode;
   private String password;
   private String name;

@@ -43,8 +43,8 @@ public class UserServiceImpl implements UserService {
       criteria.andNameLike("%" + userSearchReq.getName() + "%");
     }
 
-    if (!StringUtils.isEmpty(userSearchReq.getUsercode())) {
-      criteria.andUsercodeLike("%" + userSearchReq.getUsercode() + "%");
+    if (!StringUtils.isEmpty(userSearchReq.getUserCode())) {
+      criteria.andUsercodeLike("%" + userSearchReq.getUserCode() + "%");
     }
 
     if (userSearchReq.getBeginTime() != null && userSearchReq.getEndTime() != null) {

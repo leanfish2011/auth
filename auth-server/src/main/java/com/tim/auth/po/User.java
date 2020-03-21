@@ -16,7 +16,7 @@ public class User {
 
   private String modifierId;
 
-  private String usercode;
+  private String userCode;
 
   private String password;
 

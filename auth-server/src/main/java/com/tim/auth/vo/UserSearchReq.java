@@ -12,7 +12,7 @@ import lombok.Data;
 public class UserSearchReq {
 
   private String name;
-  private String usercode;
+  private String userCode;
   private Date beginTime;
   private Date endTime;
   private String email;
