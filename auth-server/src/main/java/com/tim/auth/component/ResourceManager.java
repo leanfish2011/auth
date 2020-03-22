@@ -40,7 +40,7 @@ public class ResourceManager {
     }
 
     TokenModel model = tokenManager.getTokenModel(token);
-    if (object.toString().contains(model.getLoginResp().getUserId())) {
+    if (!object.toString().contains(model.getLoginResp().getUserId())) {
       return Message.error("无访问权限");
     }
 
