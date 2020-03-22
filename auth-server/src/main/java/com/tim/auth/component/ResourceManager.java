@@ -2,6 +2,7 @@ package com.tim.auth.component;
 
 import com.tim.message.Message;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -35,9 +36,9 @@ public class ResourceManager {
    */
   public Message checkPermission(String requestPath, String method, String token) {
     String checkUri = requestPath;
-    //因为接口是restful，delete接口需要截掉id，获取真正的路径
-    //TODO restful类型的get请求，也会有id,怎么过滤？可以将资源编号，使用编号判断权限
-    if (method.equals("DELETE")) {
+    //因为接口是restful，delete、get等接口需要截掉id，获取真正的路径。本系统id都带有-
+    String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
+    if (StringUtils.isNotEmpty(id) && id.contains("-")) {
       checkUri = requestPath.substring(0, requestPath.lastIndexOf("/"));
     }
 
