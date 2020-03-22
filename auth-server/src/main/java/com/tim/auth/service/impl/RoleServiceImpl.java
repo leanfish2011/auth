@@ -130,6 +130,11 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public boolean addMenu(RoleMenuAdd roleMenuAdd) {
+    //先删除旧的菜单分配
+    RoleMenuDel roleMenuDel = new RoleMenuDel();
+    BeanUtils.copyProperties(roleMenuAdd, roleMenuDel);
+    deleteMenu(roleMenuDel);
+
     return roleMenuService.addMenu(roleMenuAdd);
   }
 

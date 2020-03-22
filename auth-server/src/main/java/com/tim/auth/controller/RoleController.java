@@ -140,14 +140,4 @@ public class RoleController {
     return Message.success();
   }
 
-  @ApiOperation(value = "角色删除菜单")
-  @DeleteMapping("/menu")
-  public Message deleteMenu(@RequestBody RoleMenuDel roleMenuDel) {
-    boolean result = roleService.deleteMenu(roleMenuDel);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
-  }
 }
