@@ -21,8 +21,8 @@ public interface MenuService {
   List<MenuTree> listTreeUser(String userId);
 
   /**
-   * 根据角色id查询菜单
+   * 根据角色id查询菜单，返回菜单id集合
    */
-  List<MenuTree> listTreeRole(String roleId);
+  List<String> listMenuRole(String roleId);
 
 }

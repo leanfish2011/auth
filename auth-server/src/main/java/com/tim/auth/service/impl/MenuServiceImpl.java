@@ -44,10 +44,10 @@ public class MenuServiceImpl implements MenuService {
   }
 
   @Override
-  public List<MenuTree> listTreeRole(String roleId) {
-    List<Menu> menuList = menuMapper.selectByRoleId(roleId);
+  public List<String> listMenuRole(String roleId) {
+    List<String> menuList = menuMapper.selectByRoleId(roleId);
 
-    return getMenuTreeList(menuList);
+    return menuList;
   }
 
   /**

@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, creator_id, modified_time, modifier_id, name, url, request_path, 
+    id, create_time, creator_id, modified_time, modifier_id, name, url, request_path,
     parent_id, sort_num
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap"
@@ -111,13 +111,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.tim.auth.po.Menu">
-    insert into sys_menu (id, create_time, creator_id, 
-      modified_time, modifier_id, name, 
-      url, request_path, parent_id, 
+    insert into sys_menu (id, create_time, creator_id,
+      modified_time, modifier_id, name,
+      url, request_path, parent_id,
       sort_num)
-    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{requestPath,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR},
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{requestPath,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR},
       #{sortNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tim.auth.po.Menu">
@@ -299,18 +299,17 @@
     select
     <include refid="Base_Column_List"/>
     from sys_menu m
-    where m.parent_id is not null
-    and m.id in
+    where m.id in
     (select distinct menuid
-     from sys_rolemenu
-        where roleid in
-      (select roleid from sys_roleuser where userid=#{userId,jdbcType=VARCHAR}))
+    from sys_rolemenu
+    where roleid in
+    (select roleid from sys_roleuser where userid=#{userId,jdbcType=VARCHAR}))
     order by m.sort_num
   </select>
 
-  <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="selectByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
     select
-    <include refid="Base_Column_List"/>
+    id
     from sys_menu m
     where m.parent_id is not null
     and m.id in

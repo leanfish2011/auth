@@ -123,10 +123,10 @@ public class RoleController {
 
   @ApiOperation(value = "根据角色id列出菜单")
   @GetMapping("/menu/{roleId}")
-  public Message<List<MenuTree>> listTreeRole(@PathVariable String roleId) {
-    List<MenuTree> menuTreeList = menuService.listTreeRole(roleId);
+  public Message<List<String>> listMenuRole(@PathVariable String roleId) {
+    List<String> menuList = menuService.listMenuRole(roleId);
 
-    return Message.success(menuTreeList);
+    return Message.success(menuList);
   }
 
   @ApiOperation(value = "角色增加菜单")
