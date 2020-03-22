@@ -20,7 +20,7 @@ public interface AccessService {
 
   Message check();
 
-  Message checkPermission(String uri);
+  Message checkPermission(String uri, String method);
 
   /**
    * 加载权限和角色

@@ -38,4 +38,11 @@ public class RequestManager {
     return request.getRequestURI();
   }
 
+  /**
+   * 获取当前请求方法类型
+   */
+  public String getRequestMethod() {
+    return request.getMethod();
+  }
+
 }

@@ -132,7 +132,7 @@ public class AccessServiceImpl implements AccessService {
   }
 
   @Override
-  public Message checkPermission(String uri) {
+  public Message checkPermission(String uri, String method) {
     if (StringUtils.isEmpty(uri)) {
       return Message.error("请求路径为空！");
     }
@@ -143,7 +143,7 @@ public class AccessServiceImpl implements AccessService {
       return Message.error("token无效！");
     }
 
-    return resourceManager.checkPermission(uri, token);
+    return resourceManager.checkPermission(uri, method, token);
   }
 
   @Override

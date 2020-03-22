@@ -67,8 +67,9 @@ public class AccessController {
 
   @ApiOperation(value = "检查是否有权限", notes = "需要登录,token放入Header中")
   @RequestMapping(value = "/permission", method = RequestMethod.GET)
-  public Message checkPermission(@RequestParam(value = "uri") String uri) {
-    return accessService.checkPermission(uri);
+  public Message checkPermission(@RequestParam(value = "uri") String uri,
+      @RequestParam(value = "method") String method) {
+    return accessService.checkPermission(uri, method);
   }
 
 }

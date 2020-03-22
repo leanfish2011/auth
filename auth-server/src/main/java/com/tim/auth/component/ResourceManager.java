@@ -33,8 +33,15 @@ public class ResourceManager {
    * @param token 用户token
    * @return 是否拥有该菜单权限
    */
-  public Message checkPermission(String requestPath, String token) {
-    Object object = redisTemplate.opsForValue().get(requestPath);
+  public Message checkPermission(String requestPath, String method, String token) {
+    String checkUri = requestPath;
+    //因为接口是restful，delete接口需要截掉id，获取真正的路径
+    //TODO restful类型的get请求，也会有id,怎么过滤？可以将资源编号，使用编号判断权限
+    if (method.equals("DELETE")) {
+      checkUri = requestPath.substring(0, requestPath.lastIndexOf("/"));
+    }
+
+    Object object = redisTemplate.opsForValue().get(checkUri);
     if (object == null) {
       return Message.error("资源不存在");
     }

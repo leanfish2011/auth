@@ -30,7 +30,8 @@ public class ResourceInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
-    Message message = accessService.checkPermission(requestManager.getRequestURI());
+    Message message = accessService
+        .checkPermission(requestManager.getRequestURI(), requestManager.getRequestMethod());
     if (message.getCode() == MainCode.SUCCESS) {
       return true;
     }

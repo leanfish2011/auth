@@ -14,5 +14,6 @@ public interface AccountFeignClient {
   Message check();
 
   @RequestMapping(value = "/permission", method = RequestMethod.GET)
-  Message permission(@RequestParam(value = "uri") String uri);
+  Message permission(@RequestParam(value = "uri") String uri,
+      @RequestParam(value = "method") String method);
 }
