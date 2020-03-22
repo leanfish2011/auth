@@ -1,6 +1,7 @@
 package com.tim.auth.service.impl;
 
 import com.tim.auth.ao.TokenModel;
+import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
@@ -124,7 +125,7 @@ public class AccessServiceImpl implements AccessService {
 
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
-      return Message.error("token无效！");
+      return new Message(AuthCode.INVALIDTOKEN, AuthCode.INVALIDTOKEN_MSG);
     }
 
     return Message.success(true);
