@@ -33,19 +33,4 @@ public class MenuController {
     return Message.success(menuTreeList);
   }
 
-  @ApiOperation(value = "根据用户id列出菜单")
-  @GetMapping("/user")
-  public Message<List<MenuTree>> listTreeUser(String userId) {
-    List<MenuTree> menuTreeList = menuService.listTreeUser(userId);
-
-    return Message.success(menuTreeList);
-  }
-
-  @ApiOperation(value = "根据角色id列出菜单")
-  @GetMapping("/role")
-  public Message<List<MenuTree>> listTreeRole(String roleId) {
-    List<MenuTree> menuTreeList = menuService.listTreeRole(roleId);
-
-    return Message.success(menuTreeList);
-  }
 }

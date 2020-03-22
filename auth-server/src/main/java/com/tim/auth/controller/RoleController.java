@@ -1,6 +1,8 @@
 package com.tim.auth.controller;
 
+import com.tim.auth.service.MenuService;
 import com.tim.auth.service.RoleService;
+import com.tim.auth.vo.MenuTree;
 import com.tim.auth.vo.RoleAdd;
 import com.tim.auth.vo.RoleMenuAdd;
 import com.tim.auth.vo.RoleMenuDel;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +38,9 @@ public class RoleController {
 
   @Autowired
   private RoleService roleService;
+
+  @Autowired
+  private MenuService menuService;
 
   @ApiOperation(value = "查询角色")
   @RequestMapping(method = RequestMethod.GET)
@@ -85,6 +91,14 @@ public class RoleController {
     return Message.success(roleSearchResp);
   }
 
+  @ApiOperation(value = "根据用户id列出菜单")
+  @GetMapping("/user/{userId}")
+  public Message<List<MenuTree>> listTreeUser(@PathVariable String userId) {
+    List<MenuTree> menuTreeList = menuService.listTreeUser(userId);
+
+    return Message.success(menuTreeList);
+  }
+
   @ApiOperation(value = "角色增加用户")
   @PostMapping("/user")
   public Message addUser(@RequestBody RoleUserAdd roleUserAdd) {
@@ -96,10 +110,10 @@ public class RoleController {
     return Message.success();
   }
 
-  @ApiOperation(value = "角色增加菜单")
-  @PostMapping("/menu")
-  public Message addMenu(@RequestBody RoleMenuAdd roleMenuAdd) {
-    boolean result = roleService.addMenu(roleMenuAdd);
+  @ApiOperation(value = "角色删除用户")
+  @DeleteMapping("/user")
+  public Message deleteUser(@RequestBody RoleUserDel roleUserDel) {
+    boolean result = roleService.deleteUser(roleUserDel);
     if (!result) {
       return Message.error();
     }
@@ -107,10 +121,18 @@ public class RoleController {
     return Message.success();
   }
 
-  @ApiOperation(value = "角色删除用户")
-  @DeleteMapping("/user")
-  public Message deleteUser(@RequestBody RoleUserDel roleUserDel) {
-    boolean result = roleService.deleteUser(roleUserDel);
+  @ApiOperation(value = "根据角色id列出菜单")
+  @GetMapping("/menu/{roleId}")
+  public Message<List<MenuTree>> listTreeRole(@PathVariable String roleId) {
+    List<MenuTree> menuTreeList = menuService.listTreeRole(roleId);
+
+    return Message.success(menuTreeList);
+  }
+
+  @ApiOperation(value = "角色增加菜单")
+  @PostMapping("/menu")
+  public Message addMenu(@RequestBody RoleMenuAdd roleMenuAdd) {
+    boolean result = roleService.addMenu(roleMenuAdd);
     if (!result) {
       return Message.error();
     }
