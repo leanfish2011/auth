@@ -124,6 +124,7 @@ insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`
 insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('6','0-admin','角色管理','','/api/v1/auth/role','2',6);
 insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('7','0-admin','用户角色管理','','/api/v1/auth/role/user','2',7);
 insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('8','0-admin','角色权限管理','','/api/v1/auth/role/menu','2',8);
+insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('9','0-admin','菜单管理','','/api/v1/auth/menu','2',9);
 
 
 -- 角色权限
@@ -137,9 +138,10 @@ insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('5','0-a
 insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('6','0-admin','0-role-admin','6');
 insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('7','0-admin','0-role-admin','7');
 insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('8','0-admin','0-role-admin','8');
+insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('9','0-admin','0-role-admin','9');
 
   -- 普通使用者
-insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('9','0-admin','1-role-user','0');
-insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('10','0-admin','1-role-user','1');
-insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('11','0-admin','1-role-user','3');
-insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('12','0-admin','1-role-user','4');
+insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('10','0-admin','1-role-user','0');
+insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('11','0-admin','1-role-user','1');
+insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('12','0-admin','1-role-user','3');
+insert into  sys_rolemenu (`id`,`creator_id`,`roleid`,`menuid`) values ('13','0-admin','1-role-user','4');
