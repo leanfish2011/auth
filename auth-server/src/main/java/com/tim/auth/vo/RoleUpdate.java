@@ -12,4 +12,5 @@ public class RoleUpdate {
 
   private String id;
   private String name;
+  private String remark;
 }

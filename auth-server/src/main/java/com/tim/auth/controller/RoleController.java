@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,7 +57,7 @@ public class RoleController {
 
   @ApiOperation(value = "新增角色")
   @RequestMapping(method = RequestMethod.POST)
-  public Message add(RoleAdd roleAdd) {
+  public Message add(@RequestBody RoleAdd roleAdd) {
     boolean result = roleService.add(roleAdd);
     if (!result) {
       return Message.error();
@@ -67,7 +68,7 @@ public class RoleController {
 
   @ApiOperation(value = "修改角色")
   @RequestMapping(method = RequestMethod.PUT)
-  public Message update(RoleUpdate roleUpdate) {
+  public Message update(@RequestBody RoleUpdate roleUpdate) {
     boolean result = roleService.update(roleUpdate);
     if (!result) {
       return Message.error();
@@ -86,7 +87,7 @@ public class RoleController {
 
   @ApiOperation(value = "角色增加用户")
   @PostMapping("/user")
-  public Message addUser(RoleUserAdd roleUserAdd) {
+  public Message addUser(@RequestBody RoleUserAdd roleUserAdd) {
     boolean result = roleService.addUser(roleUserAdd);
     if (!result) {
       return Message.error();
@@ -97,7 +98,7 @@ public class RoleController {
 
   @ApiOperation(value = "角色增加菜单")
   @PostMapping("/menu")
-  public Message addMenu(RoleMenuAdd roleMenuAdd) {
+  public Message addMenu(@RequestBody RoleMenuAdd roleMenuAdd) {
     boolean result = roleService.addMenu(roleMenuAdd);
     if (!result) {
       return Message.error();
@@ -108,7 +109,7 @@ public class RoleController {
 
   @ApiOperation(value = "角色删除用户")
   @DeleteMapping("/user")
-  public Message deleteUser(RoleUserDel roleUserDel) {
+  public Message deleteUser(@RequestBody RoleUserDel roleUserDel) {
     boolean result = roleService.deleteUser(roleUserDel);
     if (!result) {
       return Message.error();
@@ -119,7 +120,7 @@ public class RoleController {
 
   @ApiOperation(value = "角色删除菜单")
   @DeleteMapping("/menu")
-  public Message deleteMenu(RoleMenuDel roleMenuDel) {
+  public Message deleteMenu(@RequestBody RoleMenuDel roleMenuDel) {
     boolean result = roleService.deleteMenu(roleMenuDel);
     if (!result) {
       return Message.error();

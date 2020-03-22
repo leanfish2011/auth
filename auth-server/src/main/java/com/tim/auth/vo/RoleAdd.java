@@ -11,4 +11,5 @@ import lombok.Data;
 public class RoleAdd {
 
   private String name;
+  private String remark;
 }
