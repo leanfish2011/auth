@@ -17,4 +17,5 @@ public class UserSearchResp {
   private String email;
   private Date createTime;
   private Date modifiedTime;
+  private String password;
 }
