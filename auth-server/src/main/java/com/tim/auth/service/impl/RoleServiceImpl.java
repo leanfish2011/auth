@@ -126,7 +126,7 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public boolean addUser(RoleUserAdd roleUserAdd) {
     //先删除旧的用户
-    roleUserService.deleteUser(roleUserAdd.getRoleId());
+    roleUserService.deleteRole(roleUserAdd.getRoleId());
 
     return roleUserService.addUser(roleUserAdd);
   }
