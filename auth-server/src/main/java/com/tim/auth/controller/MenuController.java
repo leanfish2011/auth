@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,14 @@ public class MenuController {
   @RequestMapping(method = RequestMethod.GET)
   public Message<List<MenuTree>> listTree() {
     List<MenuTree> menuTreeList = menuService.listTree();
+
+    return Message.success(menuTreeList);
+  }
+
+  @ApiOperation(value = "根据用户id列出菜单")
+  @GetMapping("/user/{userId}")
+  public Message<List<MenuTree>> listTreeUser(@PathVariable String userId) {
+    List<MenuTree> menuTreeList = menuService.listTreeUser(userId);
 
     return Message.success(menuTreeList);
   }

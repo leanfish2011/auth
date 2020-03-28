@@ -130,4 +130,18 @@ public class UserServiceImpl implements UserService {
     return true;
   }
 
+  @Override
+  public List<UserSearchResp> roleUser(String roleId) {
+    List<User> users = userMapper.selectByRoleId(roleId);
+    List<UserSearchResp> list = new ArrayList<UserSearchResp>();
+    for (User user : users) {
+      UserSearchResp response = new UserSearchResp();
+      BeanUtils.copyProperties(user, response);
+
+      list.add(response);
+    }
+
+    return list;
+  }
+
 }

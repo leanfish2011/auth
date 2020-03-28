@@ -35,4 +35,6 @@ public interface UserMapper {
    */
   List<ResourceUser> loadRequestResouce();
 
+  List<User> selectByRoleId(String roleId);
+
 }

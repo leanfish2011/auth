@@ -2,6 +2,7 @@ package com.tim.auth.controller;
 
 import com.tim.auth.service.MenuService;
 import com.tim.auth.service.RoleService;
+import com.tim.auth.service.UserService;
 import com.tim.auth.vo.MenuTree;
 import com.tim.auth.vo.RoleAdd;
 import com.tim.auth.vo.RoleMenuAdd;
@@ -11,6 +12,7 @@ import com.tim.auth.vo.RoleSearchResp;
 import com.tim.auth.vo.RoleUpdate;
 import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.RoleUserDel;
+import com.tim.auth.vo.UserSearchResp;
 import com.tim.message.Message;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +43,9 @@ public class RoleController {
 
   @Autowired
   private MenuService menuService;
+
+  @Autowired
+  private UserService userService;
 
   @ApiOperation(value = "查询角色")
   @RequestMapping(method = RequestMethod.GET)
@@ -91,14 +96,6 @@ public class RoleController {
     return Message.success(roleSearchResp);
   }
 
-  @ApiOperation(value = "根据用户id列出菜单")
-  @GetMapping("/user/{userId}")
-  public Message<List<MenuTree>> listTreeUser(@PathVariable String userId) {
-    List<MenuTree> menuTreeList = menuService.listTreeUser(userId);
-
-    return Message.success(menuTreeList);
-  }
-
   @ApiOperation(value = "角色增加用户")
   @PostMapping("/user")
   public Message addUser(@RequestBody RoleUserAdd roleUserAdd) {
@@ -138,6 +135,12 @@ public class RoleController {
     }
 
     return Message.success();
+  }
+
+  @ApiOperation(value = "获取角色下用户")
+  @RequestMapping(value = "/user/{roleId}", method = RequestMethod.GET)
+  public Message<List<UserSearchResp>> roleUser(@PathVariable String roleId) {
+    return Message.success(userService.roleUser(roleId));
   }
 
 }
