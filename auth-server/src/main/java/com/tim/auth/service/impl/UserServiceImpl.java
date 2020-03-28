@@ -1,8 +1,10 @@
 package com.tim.auth.service.impl;
 
 import com.tim.auth.component.TokenManager;
+import com.tim.auth.constant.AuthConstant;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
+import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
@@ -85,14 +87,24 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public boolean add(UserAdd userAdd) {
+    //插入用户
     User user = new User();
     BeanUtils.copyProperties(userAdd, user);
     String userId = UUID.randomUUID().toString();
     user.setId(userId);
     user.setCreatorId(tokenManager.getUserId());
 
-    // 字段有值，则插入
-    return userMapper.insertSelective(user) == 1 ? true : false;
+    userMapper.insertSelective(user);
+
+    //插入默认角色
+    RoleUserAdd roleUserAdd = new RoleUserAdd();
+    roleUserAdd.setRoleId(AuthConstant.ROLE_COMMON_ID);
+    List<String> userIdList = new ArrayList<>(1);
+    userIdList.add(userId);
+    roleUserAdd.setUserIdList(userIdList);
+    roleUserService.addUser(roleUserAdd);
+
+    return true;
   }
 
   @Override

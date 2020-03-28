@@ -5,15 +5,19 @@ import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
+import com.tim.auth.constant.AuthConstant;
 import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
 import com.tim.auth.po.UserExample.Criteria;
 import com.tim.auth.service.AccessService;
+import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.LoginReq;
 import com.tim.auth.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
+import com.tim.auth.vo.RoleUserAdd;
 import com.tim.message.Message;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
@@ -40,6 +44,9 @@ public class AccessServiceImpl implements AccessService {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private RoleUserService roleUserService;
 
   @Override
   public Message<LoginResp> login(LoginReq loginReq) {
@@ -102,18 +109,24 @@ public class AccessServiceImpl implements AccessService {
       return Message.error("该用户名已经存在！");
     }
 
+    //插入用户
     User user = new User();
     BeanUtils.copyProperties(registerReq, user);
     String userId = UUID.randomUUID().toString();
     user.setId(userId);
     user.setCreatorId(registerReq.getUserCode());
 
-    // 字段有值，则插入
-    if (userMapper.insertSelective(user) == 1) {
-      return Message.success();
-    } else {
-      return Message.error();
-    }
+    userMapper.insertSelective(user);
+
+    //插入默认角色
+    RoleUserAdd roleUserAdd = new RoleUserAdd();
+    roleUserAdd.setRoleId(AuthConstant.ROLE_COMMON_ID);
+    List<String> userIdList = new ArrayList<>(1);
+    userIdList.add(userId);
+    roleUserAdd.setUserIdList(userIdList);
+    roleUserService.addUser(roleUserAdd);
+
+    return Message.success();
   }
 
   @Override
