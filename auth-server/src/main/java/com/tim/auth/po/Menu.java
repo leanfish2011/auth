@@ -25,4 +25,6 @@ public class Menu {
   private String parentId;
 
   private Integer sortNum;
+
+  private Integer isShow;
 }

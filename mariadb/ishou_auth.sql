@@ -19,6 +19,7 @@ create table `sys_menu` (
   `request_path` varchar(100) default null comment '菜单请求地址',
   `parent_id` varchar(60) default null comment '父级菜单id',
   `sort_num` int(11) default null comment '菜单顺序',
+  `is_show` tinyint(1) default 1 comment '是否作为后端管理界面菜单显示 1：是,0：否，只是作为分配权限使用',
   primary key (`id`)
 ) engine=innodb default charset=utf8 comment='系统菜单';
 
@@ -108,21 +109,21 @@ insert into sys_roleuser (`id`,`creator_id`,`userid`,`roleid`) values ('1','0-ad
 
 
 -- 菜单
-insert into sys_menu (`id`,`creator_id`,`name`,`sort_num`) values('0','0-admin','菜单',0);
+insert into sys_menu (`id`,`creator_id`,`name`,`sort_num`,`is_show`) values('0','0-admin','菜单',0,1);
 
 
   -- 一级菜单
-insert into sys_menu (`id`,`creator_id`,`name`,`parent_id`,`sort_num`) values('1','0-admin','网页管理','0',1);
-insert into sys_menu (`id`,`creator_id`,`name`,`parent_id`,`sort_num`) values('2','0-admin','权限管理','0',2);
+insert into sys_menu (`id`,`creator_id`,`name`,`parent_id`,`sort_num`,`is_show`) values('1','0-admin','网页管理','0',1,1);
+insert into sys_menu (`id`,`creator_id`,`name`,`parent_id`,`sort_num`,`is_show`) values('2','0-admin','权限管理','0',2,1);
 
       -- 二级菜单-收藏管理
-insert into sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('3','0-admin','网页收藏','/site','/api/v1/site/personal','1',3);
+insert into sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('3','0-admin','网页收藏','/site','/api/v1/site/personal','1',3,1);
 
     -- 二级菜单-权限管理
-insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('4','0-admin','用户管理','/user','/api/v1/auth/user','2',4);
-insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('5','0-admin','角色管理','/role','/api/v1/auth/role','2',5);
-insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('6','0-admin','用户角色管理','','/api/v1/auth/role/user','2',6);
-insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`) values('7','0-admin','角色权限管理','','/api/v1/auth/role/menu','2',7);
+insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('4','0-admin','用户管理','/user','/api/v1/auth/user','2',4,1);
+insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('5','0-admin','角色管理','/role','/api/v1/auth/role','2',5,1);
+insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('6','0-admin','用户角色管理','','/api/v1/auth/role/user','2',6,0);
+insert into  sys_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('7','0-admin','角色权限管理','','/api/v1/auth/role/menu','2',7,0);
 
 
 -- 角色权限
