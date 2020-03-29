@@ -55,7 +55,6 @@ public class AccessController {
   @ApiOperation(value = "通过token查自己信息", notes = "需要登录,token放入Header中")
   @GetMapping("/profile")
   public Message<TokenModel> profile() {
-    //TODO 返回菜单权限
     return accessService.profile();
   }
 

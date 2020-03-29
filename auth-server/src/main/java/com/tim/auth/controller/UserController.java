@@ -1,5 +1,6 @@
 package com.tim.auth.controller;
 
+import com.tim.auth.constant.AuthConstant;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
@@ -64,6 +65,10 @@ public class UserController {
   @ApiOperation(value = "删除用户")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
+    if (id.equals(AuthConstant.USER_ADMIN_ID) || id.equals(AuthConstant.USER_COMMON_ID)) {
+      return Message.error("系统内置用户不能删除！");
+    }
+
     boolean result = userService.delete(id);
     if (!result) {
       return Message.error();

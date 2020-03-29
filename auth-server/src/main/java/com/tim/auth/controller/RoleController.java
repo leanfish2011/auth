@@ -1,5 +1,6 @@
 package com.tim.auth.controller;
 
+import com.tim.auth.constant.AuthConstant;
 import com.tim.auth.service.MenuService;
 import com.tim.auth.service.RoleService;
 import com.tim.auth.service.UserService;
@@ -58,6 +59,10 @@ public class RoleController {
   @ApiOperation(value = "删除角色")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
+    if (id.equals(AuthConstant.ROLE_ADMIN_ID) || id.equals(AuthConstant.ROLE_COMMON_ID)) {
+      return Message.error("系统内置角色不能删除！");
+    }
+
     boolean result = roleService.delete(id);
     if (!result) {
       return Message.error();
@@ -129,6 +134,11 @@ public class RoleController {
   @ApiOperation(value = "角色增加菜单")
   @PostMapping("/menu")
   public Message addMenu(@RequestBody RoleMenuAdd roleMenuAdd) {
+    String roleId = roleMenuAdd.getRoleId();
+    if (roleId.equals(AuthConstant.ROLE_ADMIN_ID) || roleId.equals(AuthConstant.ROLE_COMMON_ID)) {
+      return Message.error("系统内置角色权限不能修改！");
+    }
+
     boolean result = roleService.addMenu(roleMenuAdd);
     if (!result) {
       return Message.error();
