@@ -16,6 +16,8 @@ import com.tim.auth.vo.LoginReq;
 import com.tim.auth.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
 import com.tim.auth.vo.RoleUserAdd;
+import com.tim.auth.vo.UpdatePwdReq;
+import com.tim.auth.vo.UserSearchResp;
 import com.tim.message.Message;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +164,37 @@ public class AccessServiceImpl implements AccessService {
   @Override
   public List<ResourceUser> loadRequestResouce() {
     return userMapper.loadRequestResouce();
+  }
+
+  @Override
+  public Message updatePassword(UpdatePwdReq updatePwdReq) {
+    String id = updatePwdReq.getId();
+    String oldPwd = updatePwdReq.getOldPassword();
+    String newPwd = updatePwdReq.getNewPassword();
+    UserSearchResp userSearchResp = userService.select(id);
+    if (userSearchResp == null) {
+      return Message.error("用户不存在！");
+    }
+
+    if (!oldPwd.equals(userSearchResp.getPassword())) {
+      return Message.error("旧密码错误！");
+    }
+
+    if (oldPwd.equals(newPwd)) {
+      return Message.error("新密码和旧密码相同！");
+    }
+
+    User user = new User();
+    user.setId(id);
+    user.setPassword(newPwd);
+    user.setModifierId(tokenManager.getUserId());
+
+    int result = userMapper.updateByPrimaryKeySelective(user);
+    if (result == 1) {
+      return Message.success();
+    }
+
+    return Message.error();
   }
 
 }

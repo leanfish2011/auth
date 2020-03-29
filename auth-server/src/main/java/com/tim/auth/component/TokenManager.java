@@ -1,5 +1,6 @@
 package com.tim.auth.component;
 
+import com.tim.auth.constant.AuthConstant;
 import com.tim.auth.vo.LoginResp;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
@@ -97,6 +98,6 @@ public class TokenManager {
     }
 
     //超级管理员id
-    return "0";
+    return AuthConstant.USER_ADMIN_ID;
   }
 }

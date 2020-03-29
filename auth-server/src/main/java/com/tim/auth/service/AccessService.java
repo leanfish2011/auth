@@ -4,6 +4,7 @@ import com.tim.auth.ao.TokenModel;
 import com.tim.auth.vo.LoginReq;
 import com.tim.auth.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
+import com.tim.auth.vo.UpdatePwdReq;
 import com.tim.message.Message;
 import java.util.List;
 import com.tim.auth.ao.ResourceUser;
@@ -27,4 +28,5 @@ public interface AccessService {
    */
   List<ResourceUser> loadRequestResouce();
 
+  Message updatePassword(UpdatePwdReq updatePwdReq);
 }
