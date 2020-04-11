@@ -1,12 +1,17 @@
 package com.tim.auth.controller;
 
+import com.tim.auth.constant.GitHubLoginConstant;
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.service.AccessService;
+import com.tim.auth.util.HttpClientUtils;
+import com.tim.auth.util.MapConvert;
 import com.tim.auth.vo.LoginReq;
 import com.tim.auth.sdk.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
 import com.tim.auth.vo.UpdatePwdReq;
 import com.tim.message.Message;
+import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +34,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(description = "账号管理")
 @RestController
 @RequestMapping("${api.version.module}/access")
+@Slf4j
 public class AccessController {
 
   @Autowired
@@ -75,6 +81,31 @@ public class AccessController {
   @PutMapping("/password")
   public Message updatePassword(@RequestBody @Validated UpdatePwdReq updatePwdReq) {
     return accessService.updatePassword(updatePwdReq);
+  }
+
+  @ApiOperation(value = "github登录")
+  @GetMapping("/login/github")
+  public Message githubLogin(String code) throws Exception {
+    log.info(code);
+    String tokenUrl = GitHubLoginConstant.TOKEN_URL.replace("CODE", code);
+    //使用code拿到包含token信息字符串
+    String tokenInfo = HttpClientUtils.doGet(tokenUrl, null);
+
+    String token = MapConvert.getMap(tokenInfo).get("access_token");
+
+    //根据token发送请求获取登录人的信息，通过令牌去获得用户信息
+    String userinfoUrl = GitHubLoginConstant.USER_INFO_URL;
+    String userInfo = HttpClientUtils.doGet(userinfoUrl, "token " + token);//json
+
+    Map<String, String> userInfoMap = MapConvert.getMapByJson(userInfo);
+    log.info(userInfoMap.toString());
+
+    //注册
+
+    //登录
+    //TODO
+
+    return Message.success();
   }
 
 }
