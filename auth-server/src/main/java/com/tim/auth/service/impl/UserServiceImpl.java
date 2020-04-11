@@ -1,7 +1,7 @@
 package com.tim.auth.service.impl;
 
 import com.tim.auth.component.TokenManager;
-import com.tim.auth.constant.AuthConstant;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.RoleUserAdd;

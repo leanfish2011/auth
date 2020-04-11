@@ -1,6 +1,6 @@
 package com.tim.auth.component;
 
-import com.tim.auth.constant.AuthConstant;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.sdk.vo.LoginResp;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;

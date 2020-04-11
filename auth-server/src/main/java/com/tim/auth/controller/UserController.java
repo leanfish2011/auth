@@ -1,6 +1,6 @@
 package com.tim.auth.controller;
 
-import com.tim.auth.constant.AuthConstant;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;

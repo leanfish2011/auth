@@ -5,7 +5,7 @@ import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
-import com.tim.auth.constant.AuthConstant;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
 import com.tim.auth.po.UserExample.Criteria;

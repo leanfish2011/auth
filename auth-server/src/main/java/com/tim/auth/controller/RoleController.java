@@ -1,13 +1,11 @@
 package com.tim.auth.controller;
 
-import com.tim.auth.constant.AuthConstant;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.MenuService;
 import com.tim.auth.service.RoleService;
 import com.tim.auth.service.UserService;
-import com.tim.auth.vo.MenuTree;
 import com.tim.auth.vo.RoleAdd;
 import com.tim.auth.vo.RoleMenuAdd;
-import com.tim.auth.vo.RoleMenuDel;
 import com.tim.auth.vo.RoleSearchReq;
 import com.tim.auth.vo.RoleSearchResp;
 import com.tim.auth.vo.RoleUpdate;

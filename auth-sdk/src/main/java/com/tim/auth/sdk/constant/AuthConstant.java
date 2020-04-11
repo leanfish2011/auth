@@ -1,4 +1,4 @@
-package com.tim.auth.constant;
+package com.tim.auth.sdk.constant;
 
 /**
  * @author：tim
