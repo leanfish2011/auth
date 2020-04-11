@@ -1,5 +1,6 @@
 package com.tim.auth.service.impl;
 
+import com.tim.auth.component.LoadResourceUser;
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
@@ -49,6 +50,9 @@ public class AccessServiceImpl implements AccessService {
 
   @Autowired
   private RoleUserService roleUserService;
+
+  @Autowired
+  private LoadResourceUser loadResourceUser;
 
   @Override
   public Message<LoginResp> login(LoginReq loginReq) {
@@ -127,6 +131,9 @@ public class AccessServiceImpl implements AccessService {
     userIdList.add(userId);
     roleUserAdd.setUserIdList(userIdList);
     roleUserService.addUser(roleUserAdd);
+
+    //刷新redis
+    loadResourceUser.load();
 
     return Message.success();
   }

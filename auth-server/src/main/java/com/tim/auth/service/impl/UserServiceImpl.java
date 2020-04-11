@@ -1,5 +1,6 @@
 package com.tim.auth.service.impl;
 
+import com.tim.auth.component.LoadResourceUser;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.RoleUserService;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private TokenManager tokenManager;
+
+  @Autowired
+  private LoadResourceUser loadResourceUser;
 
   @Override
   public List<UserSearchResp> search(UserSearchReq userSearchReq) {
@@ -104,6 +108,9 @@ public class UserServiceImpl implements UserService {
     roleUserAdd.setUserIdList(userIdList);
     roleUserService.addUser(roleUserAdd);
 
+    //刷新redis
+    loadResourceUser.load();
+
     return true;
   }
 
@@ -138,6 +145,12 @@ public class UserServiceImpl implements UserService {
 
     //从用户表中删除
     userMapper.deleteByPrimaryKey(id);
+
+    //刷新redis
+    loadResourceUser.load();
+
+    //redis中删除该用户
+    //TODO 如果库中用户删除了，但是redis中token未删除，则该用户还可以操作
 
     return true;
   }
