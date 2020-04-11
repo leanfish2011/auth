@@ -1,8 +1,8 @@
 package com.tim.auth.service;
 
-import com.tim.auth.ao.TokenModel;
+import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.vo.LoginReq;
-import com.tim.auth.vo.LoginResp;
+import com.tim.auth.sdk.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
 import com.tim.auth.vo.UpdatePwdReq;
 import com.tim.message.Message;

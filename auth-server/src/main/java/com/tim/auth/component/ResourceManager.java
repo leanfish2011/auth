@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.tim.auth.ao.ResourceUser;
-import com.tim.auth.ao.TokenModel;
+import com.tim.auth.sdk.vo.TokenModel;
 
 @Component
 public class ResourceManager {

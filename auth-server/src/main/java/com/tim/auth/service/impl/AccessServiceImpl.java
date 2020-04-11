@@ -1,6 +1,6 @@
 package com.tim.auth.service.impl;
 
-import com.tim.auth.ao.TokenModel;
+import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.component.ResourceManager;
@@ -13,7 +13,7 @@ import com.tim.auth.service.AccessService;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.LoginReq;
-import com.tim.auth.vo.LoginResp;
+import com.tim.auth.sdk.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
 import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.UpdatePwdReq;
@@ -143,7 +143,7 @@ public class AccessServiceImpl implements AccessService {
       return new Message(AuthCode.INVALIDTOKEN, AuthCode.INVALIDTOKEN_MSG);
     }
 
-    return Message.success(true);
+    return Message.success();
   }
 
   @Override

@@ -1,18 +1,15 @@
 package com.tim.auth.controller;
 
-import com.tim.auth.ao.TokenModel;
-import com.tim.auth.component.RequestManager;
-import com.tim.auth.component.ResourceManager;
+import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.service.AccessService;
 import com.tim.auth.vo.LoginReq;
-import com.tim.auth.vo.LoginResp;
+import com.tim.auth.sdk.vo.LoginResp;
 import com.tim.auth.vo.RegisterReq;
 import com.tim.auth.vo.UpdatePwdReq;
 import com.tim.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
