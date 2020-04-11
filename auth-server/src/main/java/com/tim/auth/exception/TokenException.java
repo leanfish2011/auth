@@ -1,6 +1,7 @@
 package com.tim.auth.exception;
 
-import com.tim.exception.CommonException;
+
+import com.tim.exception.type.CommonException;
 
 /**
  * @author：tim
