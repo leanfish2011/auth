@@ -22,5 +22,6 @@ public class GitHubLoginConstant {
           + CLIENT_SECRET + "&code=CODE&redirect_uri=" + CALLBACK + "";
 
   //获取用户信息的url
-  public static final String USER_INFO_URL = "https://api.github.com/user";
+  public static final String USER_INFO_URL = "https://api.github.com/user?access_token=TOKEN";
+
 }

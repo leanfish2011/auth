@@ -257,7 +257,10 @@ public class AccessServiceImpl implements AccessService {
     String token = MapConvert.getMap(tokenInfo).get("access_token");
 
     //根据token发送请求获取登录人的信息，通过令牌去获得用户信息
-    String userInfo = HttpClientUtils.doGet(GitHubLoginConstant.USER_INFO_URL, "token " + token);
+    // 经过测试，url和header都需要带上token
+    String userInfoUrl = GitHubLoginConstant.USER_INFO_URL.replace("TOKEN", token);
+    String userInfo = HttpClientUtils.doGet(userInfoUrl, "token " + token);
+
     return JSON.parseObject(userInfo, GithubUser.class);
   }
 
