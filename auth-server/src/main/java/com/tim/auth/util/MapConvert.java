@@ -15,7 +15,6 @@ public class MapConvert {
    * 将字符串转换成map
    */
   public static Map<String, String> getMap(String responseEntity) {
-
     Map<String, String> map = new HashMap<>();
     // 以&来解析字符串
     String[] result = responseEntity.split("\\&");

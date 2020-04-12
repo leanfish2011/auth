@@ -29,4 +29,12 @@ public interface AccessService {
   List<ResourceUser> loadRequestResouce();
 
   Message updatePassword(UpdatePwdReq updatePwdReq);
+
+  /**
+   * 使用github登录
+   *
+   * @param code 第一次请求github返回的code
+   * @return 登录结果
+   */
+  Message<LoginResp> githubLogin(String code) throws Exception;
 }
