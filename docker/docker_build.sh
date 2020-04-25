@@ -7,22 +7,35 @@
 # 整个项目父路径
 project_path_prefix="/home/tim/git/ishou"
 
+# 版本
+version="v1.0"
+
 # 生成的jar包后缀
 jar_name_suffix="0.0.1-SNAPSHOT.jar"
 
 function build_image()
 {
     project_path=$project_path_prefix"/"$1
-    jar_name=$1"-"$jar_name_suffix
+    jar_name=$3"-"$jar_name_suffix
     echo $project_path
     echo $jar_name
     cd $project_path
+    latest_commit_id=$(git rev-parse --short HEAD)
+    branch=$(git symbolic-ref --short -q HEAD)
+
+    cd $project_path"/"$2
     rm -rf target
+    cd $project_path"/"$3
+    rm -rf target
+
+    cd ../
     mvn package
-    cp $project_path"/target/"$jar_name $project_path"/docker"
+    cp $project_path"/"$3"/target/"$jar_name $project_path"/docker"
     cd $project_path"/docker"
+
     time=$(date "+%Y%m%d_%H%M%S")
-    docker_name=$1":"$time
+    tag=$version"_"$branch"_"$time"_"$latest_commit_id
+    docker_name=$1":"$tag
     sudo docker build -t $docker_name .
 }
 
@@ -31,7 +44,9 @@ function test(){
 }
 
 # 根据各个项目修改
-project_name="auth-server"
+project_name="auth"
+sdk_name="auth-sdk"
+service_name="auth-server"
 
 # 入口
-build_image $project_name
+build_image $project_name $sdk_name $service_name

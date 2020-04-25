@@ -29,10 +29,7 @@ public class MenuServiceImpl implements MenuService {
   @Override
   public List<MenuTree> listTree() {
     MenuExample menuExample = new MenuExample();
-    Criteria criteria = menuExample.createCriteria();
-    criteria.andParentIdIsNotNull();
-
-    menuExample.setOrderByClause(" create_time asc");
+    menuExample.setOrderByClause(" sort_num asc");
 
     List<Menu> menuList = menuMapper.selectByExample(menuExample);
 
@@ -47,10 +44,10 @@ public class MenuServiceImpl implements MenuService {
   }
 
   @Override
-  public List<MenuTree> listTreeRole(String roleId) {
-    List<Menu> menuList = menuMapper.selectByRoleId(roleId);
+  public List<String> listMenuRole(String roleId) {
+    List<String> menuList = menuMapper.selectByRoleId(roleId);
 
-    return getMenuTreeList(menuList);
+    return menuList;
   }
 
   /**
@@ -60,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
    */
   private List<MenuTree> getMenuTreeList(List<Menu> menuList) {
     // 存储一级菜单
-    List<MenuTree> menuTrees = new ArrayList<>();
+    List<MenuTree> menuTreeList = new ArrayList<>();
 
     // 将菜单构建成树
     Map<String, MenuTree> temp = new HashMap<>();// 以id和菜单为主键
@@ -69,8 +66,8 @@ public class MenuServiceImpl implements MenuService {
       BeanUtils.copyProperties(menu, menuResp);
       MenuTree menuTree = new MenuTree(menuResp);
 
-      if (menu.getParentId().equals("0")) {// 目前是二级菜单，存着子菜单。一级菜单为总的根
-        menuTrees.add(menuTree);
+      if (menu.getParentId() == null) {//一级菜单为总的根，parentid=null
+        menuTreeList.add(menuTree);
       } else {
         MenuTree parent = temp.get(menu.getParentId());// 通过parentid找到父节点
         if (parent != null) {
@@ -82,7 +79,7 @@ public class MenuServiceImpl implements MenuService {
       temp.put(menu.getId(), menuTree);
     }
 
-    return menuTrees;
+    return menuTreeList;
   }
 
 }

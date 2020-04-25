@@ -1,4 +1,4 @@
-package com.tim.auth.vo;
+package com.tim.auth.sdk.vo;
 
 import java.io.Serializable;
 import lombok.Data;
@@ -25,4 +25,9 @@ public class LoginResp implements Serializable {
    * 用户编码
    */
   private String userCode;
+
+  /**
+   * 用户名称
+   */
+  private String name;
 }

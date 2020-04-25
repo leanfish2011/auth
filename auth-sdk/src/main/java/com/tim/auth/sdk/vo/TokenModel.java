@@ -1,6 +1,5 @@
-package com.tim.auth.ao;
+package com.tim.auth.sdk.vo;
 
-import com.tim.auth.vo.LoginResp;
 import java.io.Serializable;
 import lombok.Data;
 

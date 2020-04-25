@@ -1,13 +1,14 @@
 package com.tim.auth.component;
 
-import com.tim.auth.vo.LoginResp;
+import com.tim.auth.sdk.constant.AuthConstant;
+import com.tim.auth.sdk.vo.LoginResp;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import com.tim.auth.ao.TokenModel;
+import com.tim.auth.sdk.vo.TokenModel;
 
 /**
  * 通过 Redis 存储和验证 token 的实现类
@@ -97,6 +98,6 @@ public class TokenManager {
     }
 
     //超级管理员id
-    return "0";
+    return AuthConstant.USER_ADMIN_ID;
   }
 }

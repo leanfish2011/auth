@@ -32,6 +32,6 @@ public interface MenuMapper {
 
   List<Menu> selectByUserId(String userId);
 
-  List<Menu> selectByRoleId(String roleId);
+  List<String> selectByRoleId(String roleId);
 
 }

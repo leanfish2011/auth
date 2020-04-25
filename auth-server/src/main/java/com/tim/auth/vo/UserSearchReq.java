@@ -2,6 +2,7 @@ package com.tim.auth.vo;
 
 import java.util.Date;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author：Tim
@@ -12,9 +13,15 @@ import lombok.Data;
 public class UserSearchReq {
 
   private String name;
-  private String usercode;
+
+  private String userCode;
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date beginTime;
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date endTime;
+
   private String email;
 
 }

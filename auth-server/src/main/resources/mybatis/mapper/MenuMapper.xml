@@ -13,6 +13,7 @@
     <result column="request_path" property="requestPath" jdbcType="VARCHAR"/>
     <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
     <result column="sort_num" property="sortNum" jdbcType="INTEGER"/>
+    <result column="is_show" property="isShow" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, creator_id, modified_time, modifier_id, name, url, request_path, 
-    parent_id, sort_num
+    id, create_time, creator_id, modified_time, modifier_id, name, url, request_path,
+    parent_id, sort_num, is_show
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap"
     parameterType="com.tim.auth.po.MenuExample">
@@ -111,13 +112,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.tim.auth.po.Menu">
-    insert into sys_menu (id, create_time, creator_id, 
-      modified_time, modifier_id, name, 
-      url, request_path, parent_id, 
-      sort_num)
-    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{requestPath,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+    insert into sys_menu (id, create_time, creator_id,
+      modified_time, modifier_id, name,
+      url, request_path, parent_id,
+      sort_num, is_show)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR},
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{requestPath,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR},
       #{sortNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tim.auth.po.Menu">
@@ -152,6 +153,9 @@
       </if>
       <if test="sortNum != null">
         sort_num,
+      </if>
+      <if test="isShow != null">
+        is_show,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -227,6 +231,9 @@
       <if test="record.sortNum != null">
         sort_num = #{record.sortNum,jdbcType=INTEGER},
       </if>
+      <if test="record.isShow != null">
+        is_show = #{record.isShow,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause"/>
@@ -243,7 +250,8 @@
     url = #{record.url,jdbcType=VARCHAR},
     request_path = #{record.requestPath,jdbcType=VARCHAR},
     parent_id = #{record.parentId,jdbcType=VARCHAR},
-    sort_num = #{record.sortNum,jdbcType=INTEGER}
+    sort_num = #{record.sortNum,jdbcType=INTEGER},
+    is_show = #{record.isShow,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause"/>
     </if>
@@ -278,6 +286,9 @@
       <if test="sortNum != null">
         sort_num = #{sortNum,jdbcType=INTEGER},
       </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=INTEGER}
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -291,7 +302,8 @@
       url = #{url,jdbcType=VARCHAR},
       request_path = #{requestPath,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=VARCHAR},
-      sort_num = #{sortNum,jdbcType=INTEGER}
+      sort_num = #{sortNum,jdbcType=INTEGER},
+      is_show = #{isShow,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
@@ -299,18 +311,18 @@
     select
     <include refid="Base_Column_List"/>
     from sys_menu m
-    where m.parent_id is not null
-    and m.id in
+    where m.id in
     (select distinct menuid
-     from sys_rolemenu
-        where roleid in
-      (select roleid from sys_roleuser where userid=#{userId,jdbcType=VARCHAR}))
+    from sys_rolemenu
+    where roleid in
+    (select roleid from sys_roleuser where userid=#{userId,jdbcType=VARCHAR}))
+    and m.is_show=1
     order by m.sort_num
   </select>
 
-  <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="selectByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
     select
-    <include refid="Base_Column_List"/>
+    id
     from sys_menu m
     where m.parent_id is not null
     and m.id in

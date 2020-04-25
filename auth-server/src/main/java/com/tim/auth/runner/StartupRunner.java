@@ -1,9 +1,6 @@
 package com.tim.auth.runner;
 
-import com.tim.auth.ao.ResourceUser;
-import com.tim.auth.component.ResourceManager;
-import com.tim.auth.service.AccessService;
-import java.util.List;
+import com.tim.auth.component.LoadResourceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -19,15 +16,11 @@ import org.springframework.stereotype.Component;
 public class StartupRunner implements CommandLineRunner {
 
   @Autowired
-  private AccessService accessService;
-
-  @Autowired
-  private ResourceManager resourceManager;
+  private LoadResourceUser loadResourceUser;
 
   @Override
-  public void run(String... strings) throws Exception {
+  public void run(String... strings) {
     // 加载权限进redis
-    List<ResourceUser> lstResourceUser = accessService.loadRequestResouce();
-    resourceManager.loadResource(lstResourceUser);
+    loadResourceUser.load();
   }
 }

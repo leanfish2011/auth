@@ -1,127 +1,128 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tim.auth.dao.UserMapper">
-	<resultMap id="BaseResultMap" type="com.tim.auth.po.User">
-		<id column="id" property="id" jdbcType="VARCHAR" />
-		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="creator_id" property="creatorId" jdbcType="VARCHAR" />
-		<result column="modified_time" property="modifiedTime"
-			jdbcType="TIMESTAMP" />
-		<result column="modifier_id" property="modifierId" jdbcType="VARCHAR" />
-		<result column="usercode" property="usercode" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="email" property="email" jdbcType="VARCHAR" />
-		<result column="photourl" property="photourl" jdbcType="VARCHAR" />
-		<result column="photo_fingerprint" property="photoFingerprint"
-			jdbcType="VARCHAR" />
-	</resultMap>
-	<sql id="Example_Where_Clause">
-		<where>
-			<foreach collection="oredCriteria" item="criteria" separator="or">
-				<if test="criteria.valid">
-					<trim prefix="(" suffix=")" prefixOverrides="and">
-						<foreach collection="criteria.criteria" item="criterion">
-							<choose>
-								<when test="criterion.noValue">
-									and ${criterion.condition}
-								</when>
-								<when test="criterion.singleValue">
-									and ${criterion.condition} #{criterion.value}
-								</when>
-								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
-									#{criterion.secondValue}
-								</when>
-								<when test="criterion.listValue">
-									and ${criterion.condition}
-									<foreach collection="criterion.value" item="listItem"
-										open="(" close=")" separator=",">
-										#{listItem}
-									</foreach>
-								</when>
-							</choose>
-						</foreach>
-					</trim>
-				</if>
-			</foreach>
-		</where>
-	</sql>
-	<sql id="Update_By_Example_Where_Clause">
-		<where>
-			<foreach collection="example.oredCriteria" item="criteria"
-				separator="or">
-				<if test="criteria.valid">
-					<trim prefix="(" suffix=")" prefixOverrides="and">
-						<foreach collection="criteria.criteria" item="criterion">
-							<choose>
-								<when test="criterion.noValue">
-									and ${criterion.condition}
-								</when>
-								<when test="criterion.singleValue">
-									and ${criterion.condition} #{criterion.value}
-								</when>
-								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
-									#{criterion.secondValue}
-								</when>
-								<when test="criterion.listValue">
-									and ${criterion.condition}
-									<foreach collection="criterion.value" item="listItem"
-										open="(" close=")" separator=",">
-										#{listItem}
-									</foreach>
-								</when>
-							</choose>
-						</foreach>
-					</trim>
-				</if>
-			</foreach>
-		</where>
-	</sql>
-	<sql id="Base_Column_List">
+  <resultMap id="BaseResultMap" type="com.tim.auth.po.User">
+    <id column="id" property="id" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="creator_id" property="creatorId" jdbcType="VARCHAR"/>
+    <result column="modified_time" property="modifiedTime"
+      jdbcType="TIMESTAMP"/>
+    <result column="modifier_id" property="modifierId" jdbcType="VARCHAR"/>
+    <result column="usercode" property="userCode" jdbcType="VARCHAR"/>
+    <result column="password" property="password" jdbcType="VARCHAR"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="email" property="email" jdbcType="VARCHAR"/>
+    <result column="photourl" property="photourl" jdbcType="VARCHAR"/>
+    <result column="photo_fingerprint" property="photoFingerprint"
+      jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" suffix=")" prefixOverrides="and">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value}
+                  and
+                  #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem"
+                    open="(" close=")" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria"
+        separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" suffix=")" prefixOverrides="and">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value}
+                  and
+                  #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem"
+                    open="(" close=")" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
 		id, create_time, creator_id, modified_time, modifier_id,
 		usercode,
 		password, name,
 		email, photourl, photo_fingerprint
 	</sql>
-	<select id="selectByExample" resultMap="BaseResultMap"
-		parameterType="com.tim.auth.po.UserExample">
-		select
-		<if test="distinct">
-			distinct
-		</if>
-		'true' as QUERYID,
-		<include refid="Base_Column_List" />
-		from sys_user
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-		<if test="orderByClause != null">
-			order by ${orderByClause}
-		</if>
-	</select>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.String">
-		select
-		<include refid="Base_Column_List" />
-		from sys_user
-		where id = #{id,jdbcType=VARCHAR}
-	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <select id="selectByExample" resultMap="BaseResultMap"
+    parameterType="com.tim.auth.po.UserExample">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List"/>
+    from sys_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+    parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_user
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from
 		sys_user
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
-	<delete id="deleteByExample" parameterType="com.tim.auth.po.UserExample">
-		delete from sys_user
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-	</delete>
-	<insert id="insert" parameterType="com.tim.auth.po.User">
+  <delete id="deleteByExample" parameterType="com.tim.auth.po.UserExample">
+    delete from sys_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tim.auth.po.User">
 		insert into sys_user (id,
 		create_time, creator_id,
 		modified_time, modifier_id, usercode,
@@ -131,199 +132,199 @@
 		(#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{creatorId,jdbcType=VARCHAR},
 		#{modifiedTime,jdbcType=TIMESTAMP},
-		#{modifierId,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR},
+		#{modifierId,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR},
 		#{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
 		#{email,jdbcType=VARCHAR},
 		#{photourl,jdbcType=VARCHAR},
 		#{photoFingerprint,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.tim.auth.po.User">
-		insert into sys_user
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				id,
-			</if>
-			<if test="createTime != null">
-				create_time,
-			</if>
-			<if test="creatorId != null">
-				creator_id,
-			</if>
-			<if test="modifiedTime != null">
-				modified_time,
-			</if>
-			<if test="modifierId != null">
-				modifier_id,
-			</if>
-			<if test="usercode != null">
-				usercode,
-			</if>
-			<if test="password != null">
-				password,
-			</if>
-			<if test="name != null">
-				name,
-			</if>
-			<if test="email != null">
-				email,
-			</if>
-			<if test="photourl != null">
-				photourl,
-			</if>
-			<if test="photoFingerprint != null">
-				photo_fingerprint,
-			</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				#{id,jdbcType=VARCHAR},
-			</if>
-			<if test="createTime != null">
-				#{createTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="creatorId != null">
-				#{creatorId,jdbcType=VARCHAR},
-			</if>
-			<if test="modifiedTime != null">
-				#{modifiedTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="modifierId != null">
-				#{modifierId,jdbcType=VARCHAR},
-			</if>
-			<if test="usercode != null">
-				#{usercode,jdbcType=VARCHAR},
-			</if>
-			<if test="password != null">
-				#{password,jdbcType=VARCHAR},
-			</if>
-			<if test="name != null">
-				#{name,jdbcType=VARCHAR},
-			</if>
-			<if test="email != null">
-				#{email,jdbcType=VARCHAR},
-			</if>
-			<if test="photourl != null">
-				#{photourl,jdbcType=VARCHAR},
-			</if>
-			<if test="photoFingerprint != null">
-				#{photoFingerprint,jdbcType=VARCHAR},
-			</if>
-		</trim>
-	</insert>
-	<select id="countByExample" parameterType="com.tim.auth.po.UserExample"
-		resultType="java.lang.Integer">
-		select count(*) from sys_user
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-	</select>
-	<update id="updateByExampleSelective" parameterType="map">
-		update sys_user
-		<set>
-			<if test="record.id != null">
-				id = #{record.id,jdbcType=VARCHAR},
-			</if>
-			<if test="record.createTime != null">
-				create_time = #{record.createTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="record.creatorId != null">
-				creator_id = #{record.creatorId,jdbcType=VARCHAR},
-			</if>
-			<if test="record.modifiedTime != null">
-				modified_time =
-				#{record.modifiedTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="record.modifierId != null">
-				modifier_id = #{record.modifierId,jdbcType=VARCHAR},
-			</if>
-			<if test="record.usercode != null">
-				usercode = #{record.usercode,jdbcType=VARCHAR},
-			</if>
-			<if test="record.password != null">
-				password = #{record.password,jdbcType=VARCHAR},
-			</if>
-			<if test="record.name != null">
-				name = #{record.name,jdbcType=VARCHAR},
-			</if>
-			<if test="record.email != null">
-				email = #{record.email,jdbcType=VARCHAR},
-			</if>
-			<if test="record.photourl != null">
-				photourl = #{record.photourl,jdbcType=VARCHAR},
-			</if>
-			<if test="record.photoFingerprint != null">
-				photo_fingerprint =
-				#{record.photoFingerprint,jdbcType=VARCHAR},
-			</if>
-		</set>
-		<if test="_parameter != null">
-			<include refid="Update_By_Example_Where_Clause" />
-		</if>
-	</update>
-	<update id="updateByExample" parameterType="map">
-		update sys_user
-		set id = #{record.id,jdbcType=VARCHAR},
-		create_time =
-		#{record.createTime,jdbcType=TIMESTAMP},
-		creator_id =
-		#{record.creatorId,jdbcType=VARCHAR},
-		modified_time =
-		#{record.modifiedTime,jdbcType=TIMESTAMP},
-		modifier_id =
-		#{record.modifierId,jdbcType=VARCHAR},
-		usercode =
-		#{record.usercode,jdbcType=VARCHAR},
-		password =
-		#{record.password,jdbcType=VARCHAR},
-		name =
-		#{record.name,jdbcType=VARCHAR},
-		email =
-		#{record.email,jdbcType=VARCHAR},
-		photourl =
-		#{record.photourl,jdbcType=VARCHAR},
-		photo_fingerprint =
-		#{record.photoFingerprint,jdbcType=VARCHAR}
-		<if test="_parameter != null">
-			<include refid="Update_By_Example_Where_Clause" />
-		</if>
-	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.tim.auth.po.User">
-		update sys_user
-		<set>
-			<if test="createTime != null">
-				create_time = #{createTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="creatorId != null">
-				creator_id = #{creatorId,jdbcType=VARCHAR},
-			</if>
-			<if test="modifiedTime != null">
-				modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="modifierId != null">
-				modifier_id = #{modifierId,jdbcType=VARCHAR},
-			</if>
-			<if test="usercode != null">
-				usercode = #{usercode,jdbcType=VARCHAR},
-			</if>
-			<if test="password != null">
-				password = #{password,jdbcType=VARCHAR},
-			</if>
-			<if test="name != null">
-				name = #{name,jdbcType=VARCHAR},
-			</if>
-			<if test="email != null">
-				email = #{email,jdbcType=VARCHAR},
-			</if>
-			<if test="photourl != null">
-				photourl = #{photourl,jdbcType=VARCHAR},
-			</if>
-			<if test="photoFingerprint != null">
-				photo_fingerprint = #{photoFingerprint,jdbcType=VARCHAR},
-			</if>
-		</set>
-		where id = #{id,jdbcType=VARCHAR}
-	</update>
-	<update id="updateByPrimaryKey" parameterType="com.tim.auth.po.User">
+  <insert id="insertSelective" parameterType="com.tim.auth.po.User">
+    insert into sys_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierId != null">
+        modifier_id,
+      </if>
+      <if test="userCode != null">
+        usercode,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="photourl != null">
+        photourl,
+      </if>
+      <if test="photoFingerprint != null">
+        photo_fingerprint,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierId != null">
+        #{modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="photourl != null">
+        #{photourl,jdbcType=VARCHAR},
+      </if>
+      <if test="photoFingerprint != null">
+        #{photoFingerprint,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tim.auth.po.UserExample"
+    resultType="java.lang.Integer">
+    select count(*) from sys_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_user
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorId != null">
+        creator_id = #{record.creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time =
+        #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierId != null">
+        modifier_id = #{record.modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userCode != null">
+        usercode = #{record.userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photourl != null">
+        photourl = #{record.photourl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photoFingerprint != null">
+        photo_fingerprint =
+        #{record.photoFingerprint,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause"/>
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_user
+    set id = #{record.id,jdbcType=VARCHAR},
+    create_time =
+    #{record.createTime,jdbcType=TIMESTAMP},
+    creator_id =
+    #{record.creatorId,jdbcType=VARCHAR},
+    modified_time =
+    #{record.modifiedTime,jdbcType=TIMESTAMP},
+    modifier_id =
+    #{record.modifierId,jdbcType=VARCHAR},
+    usercode =
+    #{record.userCode,jdbcType=VARCHAR},
+    password =
+    #{record.password,jdbcType=VARCHAR},
+    name =
+    #{record.name,jdbcType=VARCHAR},
+    email =
+    #{record.email,jdbcType=VARCHAR},
+    photourl =
+    #{record.photourl,jdbcType=VARCHAR},
+    photo_fingerprint =
+    #{record.photoFingerprint,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause"/>
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tim.auth.po.User">
+    update sys_user
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierId != null">
+        modifier_id = #{modifierId,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null">
+        usercode = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="photourl != null">
+        photourl = #{photourl,jdbcType=VARCHAR},
+      </if>
+      <if test="photoFingerprint != null">
+        photo_fingerprint = #{photoFingerprint,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tim.auth.po.User">
 		update sys_user
 		set create_time =
 		#{createTime,jdbcType=TIMESTAMP},
@@ -334,7 +335,7 @@
 		modifier_id =
 		#{modifierId,jdbcType=VARCHAR},
 		usercode =
-		#{usercode,jdbcType=VARCHAR},
+		#{userCode,jdbcType=VARCHAR},
 		password = #{password,jdbcType=VARCHAR},
 		name = #{name,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
@@ -343,14 +344,14 @@
 		#{photoFingerprint,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
-	<!-- 以下为拓展 -->
+  <!-- 以下为拓展 -->
 
-	<resultMap id="ResourceUser" type="com.tim.auth.ao.ResourceUser">
-		<result column="requestPath" property="requestPath" />
-		<result column="userids" property="userids" />
-	</resultMap>
+  <resultMap id="ResourceUser" type="com.tim.auth.ao.ResourceUser">
+    <result column="requestPath" property="requestPath"/>
+    <result column="userids" property="userids"/>
+  </resultMap>
 
-	<select id="loadRequestResouce" resultMap="ResourceUser">
+  <select id="loadRequestResouce" resultMap="ResourceUser">
 		select
 		a.requestPath,group_concat(a.userid) userids from (
 		select
@@ -364,5 +365,12 @@
 		t.requestPath,ru.userid) a group by
 		a.requestPath
 	</select>
+
+  <select id="selectByRoleId" resultMap="BaseResultMap"
+    parameterType="java.lang.String">
+    select u.* from sys_user u inner join sys_roleuser ru
+    on u.id=ru.userid
+    where ru.roleid=#{roleId,jdbcType=VARCHAR}
+  </select>
 
 </mapper>

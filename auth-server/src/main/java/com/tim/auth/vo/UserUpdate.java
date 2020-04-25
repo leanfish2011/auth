@@ -6,7 +6,7 @@ import lombok.Data;
 public class UserUpdate {
 
   private String id;
-  private String usercode;
+  private String userCode;
   private String password;
   private String name;
   private String email;

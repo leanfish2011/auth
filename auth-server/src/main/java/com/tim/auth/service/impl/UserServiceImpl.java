@@ -1,8 +1,11 @@
 package com.tim.auth.service.impl;
 
+import com.tim.auth.component.LoadResourceUser;
 import com.tim.auth.component.TokenManager;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
+import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
@@ -34,6 +37,9 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private TokenManager tokenManager;
 
+  @Autowired
+  private LoadResourceUser loadResourceUser;
+
   @Override
   public List<UserSearchResp> search(UserSearchReq userSearchReq) {
     UserExample example = new UserExample();
@@ -43,8 +49,8 @@ public class UserServiceImpl implements UserService {
       criteria.andNameLike("%" + userSearchReq.getName() + "%");
     }
 
-    if (!StringUtils.isEmpty(userSearchReq.getUsercode())) {
-      criteria.andUsercodeLike("%" + userSearchReq.getUsercode() + "%");
+    if (!StringUtils.isEmpty(userSearchReq.getUserCode())) {
+      criteria.andUsercodeLike("%" + userSearchReq.getUserCode() + "%");
     }
 
     if (userSearchReq.getBeginTime() != null && userSearchReq.getEndTime() != null) {
@@ -85,14 +91,27 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public boolean add(UserAdd userAdd) {
+    //插入用户
     User user = new User();
     BeanUtils.copyProperties(userAdd, user);
     String userId = UUID.randomUUID().toString();
     user.setId(userId);
     user.setCreatorId(tokenManager.getUserId());
 
-    // 字段有值，则插入
-    return userMapper.insertSelective(user) == 1 ? true : false;
+    userMapper.insertSelective(user);
+
+    //插入默认角色
+    RoleUserAdd roleUserAdd = new RoleUserAdd();
+    roleUserAdd.setRoleId(AuthConstant.ROLE_COMMON_ID);
+    List<String> userIdList = new ArrayList<>(1);
+    userIdList.add(userId);
+    roleUserAdd.setUserIdList(userIdList);
+    roleUserService.addUser(roleUserAdd);
+
+    //刷新redis
+    loadResourceUser.load();
+
+    return true;
   }
 
   @Override
@@ -127,7 +146,27 @@ public class UserServiceImpl implements UserService {
     //从用户表中删除
     userMapper.deleteByPrimaryKey(id);
 
+    //刷新redis
+    loadResourceUser.load();
+
+    //redis中删除该用户
+    //TODO 如果库中用户删除了，但是redis中token未删除，则该用户还可以操作
+
     return true;
+  }
+
+  @Override
+  public List<UserSearchResp> roleUser(String roleId) {
+    List<User> users = userMapper.selectByRoleId(roleId);
+    List<UserSearchResp> list = new ArrayList<UserSearchResp>();
+    for (User user : users) {
+      UserSearchResp response = new UserSearchResp();
+      BeanUtils.copyProperties(user, response);
+
+      list.add(response);
+    }
+
+    return list;
   }
 
 }

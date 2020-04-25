@@ -1,16 +1,15 @@
 package com.tim.auth.interceptor;
 
-import com.tim.auth.util.ResponseUtil;
-import com.tim.auth.component.RequestManager;
-import com.tim.auth.component.TokenManager;
+import com.tim.auth.service.AccessService;
+import com.tim.message.MainCode;
+import com.tim.message.Message;
+import com.tim.util.ResponseUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import com.tim.message.Message;
 
 /**
  * 登录拦截器，检查用户是否登录
@@ -22,33 +21,19 @@ import com.tim.message.Message;
 public class LoginInterceptor implements HandlerInterceptor {
 
   @Autowired
-  private RequestManager requestManager;
-
-  @Autowired
-  private TokenManager tokenManager;
+  private AccessService accessService;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
-    Message message;
-
-    //1、检查token是否传入
-    String token = requestManager.getAccessToken();
-    if (StringUtils.isEmpty(token)) {
-      message = Message.error("未找到token");
-      ResponseUtil.responseOutWithJson(response, message);
-      return false;
+    //检查token是否有效
+    Message message = accessService.check();
+    if (message.getCode() == MainCode.SUCCESS) {
+      return true;
     }
 
-    //2、检查token是否有效
-    boolean isValid = tokenManager.checkToken(token);
-    if (!isValid) {
-      message = Message.error("token无效！");
-      ResponseUtil.responseOutWithJson(response, message);
-      return false;
-    }
-
-    return true;
+    ResponseUtil.responseOutWithJson(response, message);
+    return false;
   }
 
   @Override
