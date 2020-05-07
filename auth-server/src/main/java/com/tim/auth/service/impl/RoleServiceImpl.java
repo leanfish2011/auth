@@ -1,6 +1,6 @@
 package com.tim.auth.service.impl;
 
-import com.tim.auth.component.LoadResourceUser;
+import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.dao.RoleMapper;
 import com.tim.auth.po.Role;
@@ -47,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
   private TokenManager tokenManager;
 
   @Autowired
-  private LoadResourceUser loadResourceUser;
+  private LoadResourceRole loadResourceRole;
 
   @Override
   public List<RoleSearchResp> search(RoleSearchReq roleSearchReq) {
@@ -125,7 +125,7 @@ public class RoleServiceImpl implements RoleService {
     roleMapper.deleteByPrimaryKey(id);
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
     return true;
   }
@@ -136,7 +136,7 @@ public class RoleServiceImpl implements RoleService {
     roleUserService.deleteRole(roleUserAdd.getRoleId());
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
     return roleUserService.addUser(roleUserAdd);
   }
@@ -147,7 +147,7 @@ public class RoleServiceImpl implements RoleService {
     roleMenuService.deleteRole(roleMenuAdd.getRoleId());
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
     return roleMenuService.addMenu(roleMenuAdd);
   }

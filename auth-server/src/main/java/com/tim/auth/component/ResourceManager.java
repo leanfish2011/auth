@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import com.tim.auth.ao.ResourceUser;
+import com.tim.auth.ao.ResourceRole;
 import com.tim.auth.sdk.vo.TokenModel;
 
 @Component
@@ -21,9 +21,9 @@ public class ResourceManager {
   /**
    * 加载资源权限到redis中
    */
-  public void loadResource(List<ResourceUser> resource) {
-    for (ResourceUser resourceUser : resource) {
-      redisTemplate.opsForValue().set(resourceUser.getRequestPath(), resourceUser.getUserids());
+  public void loadResource(List<ResourceRole> resource) {
+    for (ResourceRole resourceRole : resource) {
+      redisTemplate.opsForValue().set(resourceRole.getRequestPath(), resourceRole.getRoleIds());
     }
   }
 

@@ -1,6 +1,7 @@
 package com.tim.auth.dao;
 
-import com.tim.auth.ao.ResourceUser;
+import com.tim.auth.ao.ResourceRole;
+import com.tim.auth.ao.UserRole;
 import com.tim.auth.po.User;
 import com.tim.auth.po.UserExample;
 import java.util.List;
@@ -31,10 +32,12 @@ public interface UserMapper {
   int updateByPrimaryKey(User record);
 
   /**
-   * 加载权限用户
+   * 加载权限角色
    */
-  List<ResourceUser> loadRequestResouce();
+  List<ResourceRole> loadRequestResouce();
 
   List<User> selectByRoleId(String roleId);
+
+  UserRole selectUserRole(String userId);
 
 }

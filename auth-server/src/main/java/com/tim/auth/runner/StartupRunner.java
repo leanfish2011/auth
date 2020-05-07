@@ -1,6 +1,6 @@
 package com.tim.auth.runner;
 
-import com.tim.auth.component.LoadResourceUser;
+import com.tim.auth.component.LoadResourceRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 public class StartupRunner implements CommandLineRunner {
 
   @Autowired
-  private LoadResourceUser loadResourceUser;
+  private LoadResourceRole loadResourceRole;
 
   @Override
   public void run(String... strings) {
     // 加载权限进redis
-    loadResourceUser.load();
+    loadResourceRole.load();
   }
 }

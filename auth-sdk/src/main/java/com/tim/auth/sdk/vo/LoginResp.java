@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * @author：tim
  * @date：20-3-1 下午6:49
- * @description：
+ * @description： 登录成功的用户信息
  */
 @Data
 public class LoginResp implements Serializable {
@@ -30,4 +30,9 @@ public class LoginResp implements Serializable {
    * 用户名称
    */
   private String name;
+
+  /**
+   * 拥有资源角色id集合
+   */
+  private String roleIds;
 }

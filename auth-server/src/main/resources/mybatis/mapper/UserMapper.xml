@@ -346,23 +346,23 @@
 	</update>
   <!-- 以下为拓展 -->
 
-  <resultMap id="ResourceUser" type="com.tim.auth.ao.ResourceUser">
+  <resultMap id="ResourceRole" type="com.tim.auth.ao.ResourceRole">
     <result column="requestPath" property="requestPath"/>
-    <result column="userids" property="userids"/>
+    <result column="roleIds" property="roleIds"/>
   </resultMap>
 
-  <select id="loadRequestResouce" resultMap="ResourceUser">
+  <resultMap id="UserRole" type="com.tim.auth.ao.UserRole">
+    <result column="userId" property="userId"/>
+    <result column="roleIds" property="roleIds"/>
+  </resultMap>
+
+  <select id="loadRequestResouce" resultMap="ResourceRole">
 		select
-		a.requestPath,group_concat(a.userid) userids from (
-		select
-		t.requestPath,ru.userid from (
+		a.requestPath,group_concat(a.roleid) roleIds from (
 		select m.request_path requestPath,
 		rm.roleid from sys_menu m inner join
 		sys_rolemenu rm on m.id=rm.menuid
-		where m.request_path!='') t inner join sys_roleuser ru on
-		t.roleid=t.roleid
-		group by
-		t.requestPath,ru.userid) a group by
+		where m.request_path!='') a group by
 		a.requestPath
 	</select>
 
@@ -372,5 +372,12 @@
     on u.id=ru.userid
     where ru.roleid=#{roleId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectUserRole" resultMap="UserRole">
+    select userid,group_concat(roleid) roleIds
+    from ishou_auth.sys_roleuser
+    where userid=#{userId,jdbcType=VARCHAR}
+    group by userid
+	</select>
 
 </mapper>

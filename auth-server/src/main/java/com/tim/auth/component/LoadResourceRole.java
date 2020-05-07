@@ -1,6 +1,6 @@
 package com.tim.auth.component;
 
-import com.tim.auth.ao.ResourceUser;
+import com.tim.auth.ao.ResourceRole;
 import com.tim.auth.service.AccessService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class LoadResourceUser {
+public class LoadResourceRole {
 
   @Autowired
   private AccessService accessService;
@@ -23,8 +23,8 @@ public class LoadResourceUser {
   private ResourceManager resourceManager;
 
   public void load() {
-    List<ResourceUser> lstResourceUser = accessService.loadRequestResouce();
-    resourceManager.loadResource(lstResourceUser);
+    List<ResourceRole> lstResourceRole = accessService.loadRequestResouce();
+    resourceManager.loadResource(lstResourceRole);
     log.info("加载权限和用户关系到redis");
   }
 }

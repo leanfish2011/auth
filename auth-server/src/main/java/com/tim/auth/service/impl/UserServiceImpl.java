@@ -1,6 +1,6 @@
 package com.tim.auth.service.impl;
 
-import com.tim.auth.component.LoadResourceUser;
+import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.RoleUserService;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
   private TokenManager tokenManager;
 
   @Autowired
-  private LoadResourceUser loadResourceUser;
+  private LoadResourceRole loadResourceRole;
 
   @Override
   public List<UserSearchResp> search(UserSearchReq userSearchReq) {
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     roleUserService.addUser(roleUserAdd);
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
     return true;
   }
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
     userMapper.deleteByPrimaryKey(id);
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
     //redis中删除该用户
     //TODO 如果库中用户删除了，但是redis中token未删除，则该用户还可以操作
@@ -167,6 +167,20 @@ public class UserServiceImpl implements UserService {
     }
 
     return list;
+  }
+
+  @Override
+  public User findOne(String userCode) {
+    UserExample example = new UserExample();
+    Criteria criteria = example.createCriteria();
+    criteria.andUsercodeEqualTo(userCode);
+
+    List<User> userList = userMapper.selectByExample(example);
+    if (userList == null || userList.size() == 0) {
+      return null;
+    }
+
+    return userList.get(0);
   }
 
 }

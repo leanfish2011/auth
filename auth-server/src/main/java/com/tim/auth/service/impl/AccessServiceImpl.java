@@ -2,7 +2,8 @@ package com.tim.auth.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.tim.auth.ao.GithubUser;
-import com.tim.auth.component.LoadResourceUser;
+import com.tim.auth.ao.UserRole;
+import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.constant.GitHubLoginConstant;
 import com.tim.auth.constant.UserInfoConstant;
 import com.tim.auth.sdk.vo.TokenModel;
@@ -12,8 +13,6 @@ import com.tim.auth.component.ResourceManager;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.po.User;
-import com.tim.auth.po.UserExample;
-import com.tim.auth.po.UserExample.Criteria;
 import com.tim.auth.service.AccessService;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
@@ -35,7 +34,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.tim.auth.ao.ResourceUser;
+import com.tim.auth.ao.ResourceRole;
 import com.tim.auth.dao.UserMapper;
 
 @Service
@@ -61,32 +60,20 @@ public class AccessServiceImpl implements AccessService {
   private RoleUserService roleUserService;
 
   @Autowired
-  private LoadResourceUser loadResourceUser;
+  private LoadResourceRole loadResourceRole;
 
   @Override
   public Message<LoginResp> login(LoginReq loginReq) {
-    UserExample example = new UserExample();
-    Criteria criteria = example.createCriteria();
-    criteria.andUsercodeEqualTo(loginReq.getUserCode());
-
-    List<User> userList = userMapper.selectByExample(example);
-    if (userList == null || userList.size() == 0) {
+    User user = userService.findOne(loginReq.getUserCode());
+    if (user == null) {
       return Message.error("用户不存在！");
     }
 
-    User user = userList.get(0);
     if (!user.getPassword().equals(loginReq.getPassword())) {
       return Message.error("用户名或者密码错误！");
     }
 
-    LoginResp loginResp = new LoginResp();
-    loginResp.setToken(UUID.randomUUID().toString());
-    loginResp.setUserCode(user.getUserCode());
-    loginResp.setUserId(user.getId());
-    loginResp.setName(user.getName());
-
-    //redis存储
-    tokenManager.saveTokenModel(loginResp);
+    LoginResp loginResp = this.afterLogin(user);
 
     return Message.success(loginResp);
   }
@@ -124,6 +111,8 @@ public class AccessServiceImpl implements AccessService {
       return Message.error("该用户名已经存在！");
     }
 
+    //TODO 与后端新增用户代码重复
+
     //插入用户
     User user = new User();
     BeanUtils.copyProperties(registerReq, user);
@@ -142,7 +131,7 @@ public class AccessServiceImpl implements AccessService {
     roleUserService.addUser(roleUserAdd);
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
     return Message.success();
   }
@@ -178,7 +167,7 @@ public class AccessServiceImpl implements AccessService {
   }
 
   @Override
-  public List<ResourceUser> loadRequestResouce() {
+  public List<ResourceRole> loadRequestResouce() {
     return userMapper.loadRequestResouce();
   }
 
@@ -271,21 +260,29 @@ public class AccessServiceImpl implements AccessService {
    * @return 登录成功用户信息
    */
   private LoginResp login(String userCode) {
-    UserExample example = new UserExample();
-    Criteria criteria = example.createCriteria();
-    criteria.andUsercodeEqualTo(userCode);
-
-    List<User> userList = userMapper.selectByExample(example);
-    if (userList == null || userList.size() == 0) {
+    User user = userService.findOne(userCode);
+    if (user == null) {
       return null;
     }
 
-    User user = userList.get(0);
+    return afterLogin(user);
+  }
+
+  /**
+   * 登录成功后处理
+   *
+   * @param user 登录成功的用户
+   * @return 登录成功后信息
+   */
+  private LoginResp afterLogin(User user) {
     LoginResp loginResp = new LoginResp();
     loginResp.setToken(UUID.randomUUID().toString());
     loginResp.setUserCode(user.getUserCode());
     loginResp.setUserId(user.getId());
     loginResp.setName(user.getName());
+
+    UserRole userRole = userMapper.selectUserRole(user.getId());
+    loginResp.setRoleIds(userRole.getRoleIds());
 
     //redis存储
     tokenManager.saveTokenModel(loginResp);

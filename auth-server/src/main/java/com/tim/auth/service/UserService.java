@@ -23,4 +23,6 @@ public interface UserService {
   boolean delete(String id);
 
   List<UserSearchResp> roleUser(String roleId);
+
+  User findOne(String userCode);
 }
