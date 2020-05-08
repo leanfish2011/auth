@@ -1,7 +1,10 @@
 package com.tim.auth.component;
 
 import com.tim.message.Message;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,13 +45,18 @@ public class ResourceManager {
       checkUri = requestPath.substring(0, requestPath.lastIndexOf("/"));
     }
 
-    Object object = redisTemplate.opsForValue().get(checkUri);
-    if (object == null) {
+    Object urlRoleIdsObj = redisTemplate.opsForValue().get(checkUri);
+    if (urlRoleIdsObj == null) {
       return Message.error("资源不存在");
     }
 
+    //鉴权：判断url需要的角色，是否在用户所属角色中
     TokenModel model = tokenManager.getTokenModel(token);
-    if (!object.toString().contains(model.getLoginResp().getUserId())) {
+    String roleIds = model.getLoginResp().getRoleIds();
+    Set<String> userRoleSet = new HashSet<>(Arrays.asList(roleIds.split(",")));
+    userRoleSet.retainAll(Arrays.asList(urlRoleIdsObj.toString().split(",")));
+
+    if (userRoleSet.size() == 0) {
       return Message.error("无访问权限");
     }
 
