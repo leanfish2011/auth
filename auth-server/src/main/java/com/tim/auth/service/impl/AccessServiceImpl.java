@@ -64,12 +64,16 @@ public class AccessServiceImpl implements AccessService {
 
   @Override
   public Message<LoginResp> login(LoginReq loginReq) {
-    User user = userService.findOne(loginReq.getUserCode());
+    String userCode = loginReq.getUserCode();
+    User user = userService.findOne(userCode);
     if (user == null) {
+      log.warn("用户不存在，用户名：{}", userCode);
       return Message.error("用户不存在！");
     }
 
-    if (!user.getPassword().equals(loginReq.getPassword())) {
+    String password = loginReq.getPassword();
+    if (!user.getPassword().equals(password)) {
+      log.warn("用户名或者密码错误，用户名：{}，密码：{}", userCode, password);
       return Message.error("用户名或者密码错误！");
     }
 
@@ -82,6 +86,7 @@ public class AccessServiceImpl implements AccessService {
   public Message logout() {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
+      log.warn("token为空");
       return Message.error("token为空！");
     }
 
@@ -93,11 +98,13 @@ public class AccessServiceImpl implements AccessService {
   public Message<TokenModel> profile() {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
+      log.warn("token为空");
       return Message.error("token为空！");
     }
 
     TokenModel tokenModel = tokenManager.getTokenModel(token);
     if (tokenModel == null) {
+      log.warn("未找到用户信息，token:{}", token);
       return Message.error("未找到用户信息！");
     }
 
@@ -106,8 +113,10 @@ public class AccessServiceImpl implements AccessService {
 
   @Override
   public Message register(RegisterReq registerReq) {
-    boolean isExist = userService.isExist(registerReq.getUserCode());
+    String userCode = registerReq.getUserCode();
+    boolean isExist = userService.isExist(userCode);
     if (isExist) {
+      log.warn("该用户名已经存在，用户名:{}", userCode);
       return Message.error("该用户名已经存在！");
     }
 
@@ -118,7 +127,7 @@ public class AccessServiceImpl implements AccessService {
     BeanUtils.copyProperties(registerReq, user);
     String userId = UUID.randomUUID().toString();
     user.setId(userId);
-    user.setCreatorId(registerReq.getUserCode());
+    user.setCreatorId(userCode);
 
     userMapper.insertSelective(user);
 
@@ -140,11 +149,13 @@ public class AccessServiceImpl implements AccessService {
   public Message check() {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
+      log.warn("token为空");
       return Message.error("token为空！");
     }
 
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
+      log.warn("token无效，为空或不存在，token:{}", token);
       return new Message(AuthCode.INVALIDTOKEN, AuthCode.INVALIDTOKEN_MSG);
     }
 
@@ -154,13 +165,15 @@ public class AccessServiceImpl implements AccessService {
   @Override
   public Message checkPermission(String uri, String method) {
     if (StringUtils.isEmpty(uri)) {
+      log.warn("请求路径为空");
       return Message.error("请求路径为空！");
     }
 
     String token = requestManager.getAccessToken();
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
-      return Message.error("token无效！");
+      log.warn("token无效，为空或不存在，token:{}", token);
+      return Message.error("token无效，为空或不存在！");
     }
 
     return resourceManager.checkPermission(uri, method, token);
@@ -174,18 +187,22 @@ public class AccessServiceImpl implements AccessService {
   @Override
   public Message updatePassword(UpdatePwdReq updatePwdReq) {
     String id = updatePwdReq.getId();
-    String oldPwd = updatePwdReq.getOldPassword();
-    String newPwd = updatePwdReq.getNewPassword();
     UserSearchResp userSearchResp = userService.select(id);
     if (userSearchResp == null) {
+      log.warn("用户不存在，用户id:{}", id);
       return Message.error("用户不存在！");
     }
 
-    if (!oldPwd.equals(userSearchResp.getPassword())) {
+    String inputOldPwd = updatePwdReq.getOldPassword();
+    String dbOldPwd = userSearchResp.getPassword();
+    if (!inputOldPwd.equals(dbOldPwd)) {
+      log.warn("旧密码错误，输入的旧密码:{}，数据库中的旧密码：{}", inputOldPwd, dbOldPwd);
       return Message.error("旧密码错误！");
     }
 
-    if (oldPwd.equals(newPwd)) {
+    String newPwd = updatePwdReq.getNewPassword();
+    if (inputOldPwd.equals(newPwd)) {
+      log.warn("新密码和旧密码相同，新密码：{}，旧密码：", newPwd, inputOldPwd);
       return Message.error("新密码和旧密码相同！");
     }
 
@@ -262,6 +279,7 @@ public class AccessServiceImpl implements AccessService {
   private LoginResp login(String userCode) {
     User user = userService.findOne(userCode);
     if (user == null) {
+      log.warn("用户不存在，用户名：{}", userCode);
       return null;
     }
 
