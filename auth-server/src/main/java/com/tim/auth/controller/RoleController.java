@@ -1,13 +1,11 @@
 package com.tim.auth.controller;
 
-import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.MenuService;
 import com.tim.auth.service.RoleService;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.RoleAdd;
 import com.tim.auth.vo.RoleMenuAdd;
 import com.tim.auth.vo.RoleSearchReq;
-import com.tim.auth.vo.RoleSearchResp;
 import com.tim.auth.vo.RoleUpdate;
 import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.RoleUserDel;
@@ -49,100 +47,55 @@ public class RoleController {
   @ApiOperation(value = "查询角色")
   @RequestMapping(method = RequestMethod.GET)
   public Message search(RoleSearchReq roleSearchReq) {
-    List<RoleSearchResp> rolesList = roleService.search(roleSearchReq);
-
-    return Message.success(rolesList);
+    return Message.success(roleService.search(roleSearchReq));
   }
 
   @ApiOperation(value = "删除角色")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
-    if (id.equals(AuthConstant.ROLE_ADMIN_ID) || id.equals(AuthConstant.ROLE_COMMON_ID)) {
-      return Message.error("系统内置角色不能删除！");
-    }
-
-    boolean result = roleService.delete(id);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
+    return roleService.delete(id);
   }
 
   @ApiOperation(value = "新增角色")
   @RequestMapping(method = RequestMethod.POST)
   public Message add(@RequestBody RoleAdd roleAdd) {
-    boolean result = roleService.add(roleAdd);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
+    return roleService.add(roleAdd);
   }
 
   @ApiOperation(value = "修改角色")
   @RequestMapping(method = RequestMethod.PUT)
   public Message update(@RequestBody RoleUpdate roleUpdate) {
-    boolean result = roleService.update(roleUpdate);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
+    return roleService.update(roleUpdate);
   }
 
   @ApiOperation(value = "获取角色信息")
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public Message select(@PathVariable String id) {
-    RoleSearchResp roleSearchResp = roleService.select(id);
-
-    return Message.success(roleSearchResp);
+    return Message.success(roleService.select(id));
   }
 
   @ApiOperation(value = "角色增加用户")
   @PostMapping("/user")
   public Message addUser(@RequestBody RoleUserAdd roleUserAdd) {
-    boolean result = roleService.addUser(roleUserAdd);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
+    return roleService.addUser(roleUserAdd);
   }
 
   @ApiOperation(value = "角色删除用户")
   @DeleteMapping("/user")
   public Message deleteUser(@RequestBody RoleUserDel roleUserDel) {
-    boolean result = roleService.deleteUser(roleUserDel);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
+    return roleService.deleteUser(roleUserDel);
   }
 
   @ApiOperation(value = "根据角色id列出菜单")
   @GetMapping("/menu/{roleId}")
   public Message<List<String>> listMenuRole(@PathVariable String roleId) {
-    List<String> menuList = menuService.listMenuRole(roleId);
-
-    return Message.success(menuList);
+    return Message.success(menuService.listMenuRole(roleId));
   }
 
   @ApiOperation(value = "角色增加菜单")
   @PostMapping("/menu")
   public Message addMenu(@RequestBody RoleMenuAdd roleMenuAdd) {
-    String roleId = roleMenuAdd.getRoleId();
-    if (roleId.equals(AuthConstant.ROLE_ADMIN_ID) || roleId.equals(AuthConstant.ROLE_COMMON_ID)) {
-      return Message.error("系统内置角色权限不能修改！");
-    }
-
-    boolean result = roleService.addMenu(roleMenuAdd);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
+    return roleService.addMenu(roleMenuAdd);
   }
 
   @ApiOperation(value = "获取角色下用户")
