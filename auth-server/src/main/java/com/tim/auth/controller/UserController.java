@@ -41,17 +41,7 @@ public class UserController {
   @ApiOperation(value = "新增用户")
   @RequestMapping(method = RequestMethod.POST)
   public Message add(@RequestBody UserAdd userAdd) {
-    boolean isExist = userService.isExist(userAdd.getUserCode());
-    if (isExist) {
-      return Message.error("该用户名已经存在！");
-    }
-
-    boolean result = userService.add(userAdd);
-    if (!result) {
-      return Message.error("新增用户失败！");
-    }
-
-    return Message.success("新增用户成功！");
+    return userService.add(userAdd);
   }
 
   @ApiOperation(value = "修改用户")

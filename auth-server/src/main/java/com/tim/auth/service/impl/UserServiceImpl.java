@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.tim.auth.po.UserExample.Criteria;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
   @Autowired
@@ -90,7 +92,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean add(UserAdd userAdd) {
+  public Message add(UserAdd userAdd) {
+    String userCode = userAdd.getUserCode();
+    boolean isExist = isExist(userCode);
+    if (isExist) {
+      log.warn("用户名已经存在：{}", userCode);
+      return Message.error("该用户名已经存在！");
+    }
+
     //插入用户
     User user = new User();
     BeanUtils.copyProperties(userAdd, user);
@@ -111,7 +120,7 @@ public class UserServiceImpl implements UserService {
     //刷新redis
     loadResourceRole.load();
 
-    return true;
+    return Message.success("新增用户成功！");
   }
 
   @Override

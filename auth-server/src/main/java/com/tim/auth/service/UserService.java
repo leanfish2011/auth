@@ -14,7 +14,7 @@ public interface UserService {
 
   boolean isExist(String userCode);
 
-  boolean add(UserAdd userAdd);
+  Message add(UserAdd userAdd);
 
   Message update(UserUpdate userUpdate);
 
