@@ -29,17 +29,13 @@ public class MenuController {
   @ApiOperation(value = "列出菜单")
   @RequestMapping(method = RequestMethod.GET)
   public Message<List<MenuTree>> listTree() {
-    List<MenuTree> menuTreeList = menuService.listTree();
-
-    return Message.success(menuTreeList);
+    return Message.success(menuService.listTree());
   }
 
   @ApiOperation(value = "根据用户id列出菜单")
   @GetMapping("/user/{userId}")
   public Message<List<MenuTree>> listTreeUser(@PathVariable String userId) {
-    List<MenuTree> menuTreeList = menuService.listTreeUser(userId);
-
-    return Message.success(menuTreeList);
+    return Message.success(menuService.listTreeUser(userId));
   }
 
 }
