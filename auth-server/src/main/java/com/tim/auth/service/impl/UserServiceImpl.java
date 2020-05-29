@@ -148,7 +148,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-  public boolean delete(String id) {
+  public Message delete(String id) {
+    if (id.equals(AuthConstant.USER_ADMIN_ID) || id.equals(AuthConstant.USER_COMMON_ID)) {
+      log.warn("系统内置用户不能删除，id：{}", id);
+      return Message.error("系统内置用户不能删除！");
+    }
+
     //从角色用户表中删除
     roleUserService.deleteUser(id);
 
@@ -160,8 +165,9 @@ public class UserServiceImpl implements UserService {
 
     //redis中删除该用户
     //TODO 如果库中用户删除了，但是redis中token未删除，则该用户还可以操作
+    //需要通过id查找用户token，删除token
 
-    return true;
+    return Message.success("删除用户成功！");
   }
 
   @Override

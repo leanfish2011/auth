@@ -20,7 +20,7 @@ public interface UserService {
 
   UserSearchResp select(String id);
 
-  boolean delete(String id);
+  Message delete(String id);
 
   List<UserSearchResp> roleUser(String roleId);
 
