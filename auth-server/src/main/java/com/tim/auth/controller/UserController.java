@@ -29,9 +29,7 @@ public class UserController {
   @ApiOperation(value = "查询用户")
   @RequestMapping(method = RequestMethod.GET)
   public Message<List<UserSearchResp>> search(UserSearchReq userSearchReq) {
-    List<UserSearchResp> lstUser = userService.search(userSearchReq);
-
-    return Message.success(lstUser);
+    return Message.success(userService.search(userSearchReq));
   }
 
   @ApiOperation(value = "获取用户信息")
