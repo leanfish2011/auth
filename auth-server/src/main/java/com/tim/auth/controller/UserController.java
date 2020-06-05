@@ -40,19 +40,22 @@ public class UserController {
   @ApiOperation(value = "新增用户")
   @RequestMapping(method = RequestMethod.POST)
   public Message add(@RequestBody UserAdd userAdd) {
-    return userService.add(userAdd);
+    userService.add(userAdd);
+    return Message.success("新增用户成功！");
   }
 
   @ApiOperation(value = "修改用户")
   @RequestMapping(method = RequestMethod.PUT)
   public Message update(@RequestBody UserUpdate userUpdate) {
-    return userService.update(userUpdate);
+    userService.update(userUpdate);
+    return Message.success("更新用户成功！");
   }
 
   @ApiOperation(value = "删除用户")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
-    return userService.delete(id);
+    userService.delete(id);
+    return Message.success("删除用户成功！");
   }
 
 }

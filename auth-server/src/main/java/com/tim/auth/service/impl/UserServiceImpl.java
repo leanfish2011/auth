@@ -2,6 +2,8 @@ package com.tim.auth.service.impl;
 
 import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.component.TokenManager;
+import com.tim.auth.exception.DuplicateException;
+import com.tim.auth.exception.NotModifyException;
 import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
@@ -10,7 +12,6 @@ import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
 import com.tim.auth.vo.UserUpdate;
-import com.tim.message.Message;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean isExist(String userCode) {
+  public Boolean isExist(String userCode) {
     UserExample example = new UserExample();
     Criteria criteria = example.createCriteria();
 
@@ -92,12 +93,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Message add(UserAdd userAdd) {
+  public Boolean add(UserAdd userAdd) {
     String userCode = userAdd.getUserCode();
     boolean isExist = isExist(userCode);
     if (isExist) {
       log.warn("用户名已经存在：{}", userCode);
-      return Message.error("该用户名已经存在！");
+      throw new DuplicateException("该用户名已经存在！");
     }
 
     //插入用户
@@ -120,21 +121,19 @@ public class UserServiceImpl implements UserService {
     //刷新redis
     loadResourceRole.load();
 
-    return Message.success("新增用户成功！");
+    log.info("新增用户成功，用户名：{}", userCode);
+    return true;
   }
 
   @Override
-  public Message update(UserUpdate userUpdate) {
+  public Boolean update(UserUpdate userUpdate) {
     User user = new User();
     BeanUtils.copyProperties(userUpdate, user);
     user.setModifierId(tokenManager.getUserId());
+    userMapper.updateByPrimaryKeySelective(user);
+    log.info("更新用户成功，用户名：{}", user.getUserCode());
 
-    int result = userMapper.updateByPrimaryKeySelective(user);
-    if (result == 1) {
-      return Message.success();
-    }
-
-    return Message.error();
+    return true;
   }
 
   @Override
@@ -148,10 +147,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-  public Message delete(String id) {
+  public Boolean delete(String id) {
     if (id.equals(AuthConstant.USER_ADMIN_ID) || id.equals(AuthConstant.USER_COMMON_ID)) {
       log.warn("系统内置用户不能删除，id：{}", id);
-      return Message.error("系统内置用户不能删除！");
+      throw new NotModifyException("系统内置用户不能删除！");
     }
 
     //从角色用户表中删除
@@ -167,13 +166,14 @@ public class UserServiceImpl implements UserService {
     //TODO 如果库中用户删除了，但是redis中token未删除，则该用户还可以操作
     //需要通过id查找用户token，删除token
 
-    return Message.success("删除用户成功！");
+    log.info("删除用户成功！");
+    return true;
   }
 
   @Override
   public List<UserSearchResp> roleUser(String roleId) {
     List<User> users = userMapper.selectByRoleId(roleId);
-    List<UserSearchResp> list = new ArrayList<UserSearchResp>();
+    List<UserSearchResp> list = new ArrayList<>();
     for (User user : users) {
       UserSearchResp response = new UserSearchResp();
       BeanUtils.copyProperties(user, response);
