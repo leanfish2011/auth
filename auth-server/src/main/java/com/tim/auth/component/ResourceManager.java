@@ -1,5 +1,8 @@
 package com.tim.auth.component;
 
+import com.tim.auth.exception.NoAccessException;
+import com.tim.auth.exception.NotFoundException;
+import com.tim.exception.type.CommonException;
 import com.tim.message.Message;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,7 +40,7 @@ public class ResourceManager {
    * @param token 用户token
    * @return 是否拥有该菜单权限
    */
-  public Message checkPermission(String requestPath, String method, String token) {
+  public Boolean checkPermission(String requestPath, String method, String token) {
     String checkUri = requestPath;
     //因为接口是restful，delete、get等接口需要截掉id，获取真正的路径。本系统id都带有-
     String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
@@ -47,7 +50,7 @@ public class ResourceManager {
 
     Object urlRoleIdsObj = redisTemplate.opsForValue().get(checkUri);
     if (urlRoleIdsObj == null) {
-      return Message.error("资源不存在");
+      throw new NotFoundException("资源不存在");
     }
 
     //鉴权：判断url需要的角色，是否在用户所属角色中
@@ -57,10 +60,10 @@ public class ResourceManager {
     userRoleSet.retainAll(Arrays.asList(urlRoleIdsObj.toString().split(",")));
 
     if (userRoleSet.size() == 0) {
-      return Message.error("无访问权限");
+      throw new NoAccessException("无访问权限");
     }
 
-    return Message.success();
+    return true;
   }
 
 }

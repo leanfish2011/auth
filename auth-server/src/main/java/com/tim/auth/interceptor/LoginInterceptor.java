@@ -27,12 +27,13 @@ public class LoginInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
     //检查token是否有效
-    Message message = accessService.check();
-    if (message.getCode() == MainCode.SUCCESS) {
+    boolean isSuccess = accessService.check();
+    if (isSuccess) {
       return true;
     }
 
-    ResponseUtil.responseOutWithJson(response, message);
+    //TODO
+    //ResponseUtil.responseOutWithJson(response, message);
     return false;
   }
 

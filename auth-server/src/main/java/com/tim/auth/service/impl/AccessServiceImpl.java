@@ -6,6 +6,10 @@ import com.tim.auth.ao.UserRole;
 import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.constant.GitHubLoginConstant;
 import com.tim.auth.constant.UserInfoConstant;
+import com.tim.auth.exception.BadParameterException;
+import com.tim.auth.exception.DuplicateException;
+import com.tim.auth.exception.InvalidTokenException;
+import com.tim.auth.exception.NotFoundException;
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
@@ -24,8 +28,6 @@ import com.tim.auth.vo.RegisterReq;
 import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.UpdatePwdReq;
 import com.tim.auth.vo.UserSearchResp;
-import com.tim.message.MainCode;
-import com.tim.message.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -63,61 +65,59 @@ public class AccessServiceImpl implements AccessService {
   private LoadResourceRole loadResourceRole;
 
   @Override
-  public Message<LoginResp> login(LoginReq loginReq) {
+  public LoginResp login(LoginReq loginReq) {
     String userCode = loginReq.getUserCode();
     User user = userService.findOne(userCode);
     if (user == null) {
       log.warn("用户不存在，用户名：{}", userCode);
-      return Message.error("用户不存在！");
+      throw new NotFoundException("用户不存在！");
     }
 
     String password = loginReq.getPassword();
     if (!user.getPassword().equals(password)) {
       log.warn("用户名或者密码错误，用户名：{}，密码：{}", userCode, password);
-      return Message.error("用户名或者密码错误！");
+      throw new BadParameterException("用户名或者密码错误！");
     }
 
-    LoginResp loginResp = this.afterLogin(user);
-
-    return Message.success(loginResp);
+    return this.afterLogin(user);
   }
 
   @Override
-  public Message logout() {
+  public Boolean logout() {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
       log.warn("token为空");
-      return Message.error("token为空！");
+      throw new NotFoundException("token为空！");
     }
 
     tokenManager.deleteToken(token);
-    return Message.success();
+    return true;
   }
 
   @Override
-  public Message<TokenModel> profile() {
+  public TokenModel profile() {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
       log.warn("token为空");
-      return Message.error("token为空！");
+      throw new NotFoundException("token为空！");
     }
 
     TokenModel tokenModel = tokenManager.getTokenModel(token);
     if (tokenModel == null) {
       log.warn("未找到用户信息，token:{}", token);
-      return Message.error("未找到用户信息！");
+      throw new NotFoundException("未找到用户信息！");
     }
 
-    return Message.success(tokenModel);
+    return tokenModel;
   }
 
   @Override
-  public Message register(RegisterReq registerReq) {
+  public Boolean register(RegisterReq registerReq) {
     String userCode = registerReq.getUserCode();
     boolean isExist = userService.isExist(userCode);
     if (isExist) {
       log.warn("该用户名已经存在，用户名:{}", userCode);
-      return Message.error("该用户名已经存在！");
+      throw new DuplicateException("该用户名已经存在！");
     }
 
     //TODO 与后端新增用户代码重复
@@ -142,38 +142,38 @@ public class AccessServiceImpl implements AccessService {
     //刷新redis
     loadResourceRole.load();
 
-    return Message.success();
+    return true;
   }
 
   @Override
-  public Message check() {
+  public Boolean check() {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
       log.warn("token为空");
-      return Message.error("token为空！");
+      throw new NotFoundException("token为空！");
     }
 
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
       log.warn("token无效，为空或不存在，token:{}", token);
-      return new Message(AuthCode.INVALIDTOKEN, AuthCode.INVALIDTOKEN_MSG);
+      throw new InvalidTokenException(AuthCode.INVALIDTOKEN_MSG);
     }
 
-    return Message.success();
+    return true;
   }
 
   @Override
-  public Message checkPermission(String uri, String method) {
+  public Boolean checkPermission(String uri, String method) {
     if (StringUtils.isEmpty(uri)) {
       log.warn("请求路径为空");
-      return Message.error("请求路径为空！");
+      throw new NotFoundException("请求路径为空！");
     }
 
     String token = requestManager.getAccessToken();
     boolean isExist = tokenManager.checkToken(token);
     if (!isExist) {
       log.warn("token无效，为空或不存在，token:{}", token);
-      return Message.error("token无效，为空或不存在！");
+      throw new InvalidTokenException(AuthCode.INVALIDTOKEN_MSG);
     }
 
     return resourceManager.checkPermission(uri, method, token);
@@ -185,25 +185,25 @@ public class AccessServiceImpl implements AccessService {
   }
 
   @Override
-  public Message updatePassword(UpdatePwdReq updatePwdReq) {
+  public Boolean updatePassword(UpdatePwdReq updatePwdReq) {
     String id = updatePwdReq.getId();
     UserSearchResp userSearchResp = userService.select(id);
     if (userSearchResp == null) {
       log.warn("用户不存在，用户id:{}", id);
-      return Message.error("用户不存在！");
+      throw new NotFoundException("用户不存在！");
     }
 
     String inputOldPwd = updatePwdReq.getOldPassword();
     String dbOldPwd = userSearchResp.getPassword();
     if (!inputOldPwd.equals(dbOldPwd)) {
       log.warn("旧密码错误，输入的旧密码:{}，数据库中的旧密码：{}", inputOldPwd, dbOldPwd);
-      return Message.error("旧密码错误！");
+      throw new BadParameterException("旧密码错误！");
     }
 
     String newPwd = updatePwdReq.getNewPassword();
     if (inputOldPwd.equals(newPwd)) {
       log.warn("新密码和旧密码相同，新密码：{}，旧密码：", newPwd, inputOldPwd);
-      return Message.error("新密码和旧密码相同！");
+      throw new BadParameterException("新密码和旧密码相同！");
     }
 
     User user = new User();
@@ -211,23 +211,21 @@ public class AccessServiceImpl implements AccessService {
     user.setPassword(newPwd);
     user.setModifierId(tokenManager.getUserId());
 
-    int result = userMapper.updateByPrimaryKeySelective(user);
-    if (result == 1) {
-      return Message.success();
-    }
+    userMapper.updateByPrimaryKeySelective(user);
 
-    return Message.error();
+    return true;
   }
 
   @Override
-  public Message<LoginResp> githubLogin(String code) throws Exception {
+  public LoginResp githubLogin(String code) throws Exception {
+    log.info("github返回授权码：" + code);
     GithubUser githubUser = this.queryUser(code);
 
     boolean isExist = userService.isExist(githubUser.getLogin());
     if (isExist) {
       LoginResp loginResp = this.login(githubUser.getLogin());
       if (loginResp != null) {
-        return Message.success(loginResp);
+        return loginResp;
       }
     }
 
@@ -238,15 +236,15 @@ public class AccessServiceImpl implements AccessService {
     registerReq.setName(githubUser.getName());
     registerReq.setEmail(githubUser.getEmail());
 
-    Message message = this.register(registerReq);
-    if (message.getCode().equals(MainCode.SUCCESS)) {
+    boolean isSuccess = this.register(registerReq);
+    if (isSuccess) {
       LoginResp loginResp = this.login(githubUser.getLogin());
       if (loginResp != null) {
-        return Message.success(loginResp);
+        return loginResp;
       }
     }
 
-    return Message.error("GitHub登录失败");
+    throw new BadParameterException("GitHub登录失败");
   }
 
   /**
