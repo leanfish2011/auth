@@ -15,33 +15,28 @@ public interface RoleService {
 
   List<RoleSearchResp> search(RoleSearchReq roleSearchReq);
 
-  boolean isExist(String name);
+  Boolean isExist(String name);
 
-  Message add(RoleAdd roleAdd);
+  Boolean add(RoleAdd roleAdd);
 
-  Message update(RoleUpdate roleUpdate);
+  Boolean update(RoleUpdate roleUpdate);
 
   RoleSearchResp select(String id);
 
-  Message delete(String id);
+  Boolean delete(String id);
 
   /**
-   * 角色增加用户
+   * 角色增加用户。先删除角色下旧的全部用户，再增加
+   *
+   * @param roleUserAdd 全量用户
    */
-  Message addUser(RoleUserAdd roleUserAdd);
+  Boolean addUser(RoleUserAdd roleUserAdd);
 
   /**
-   * 角色增加菜单
+   * 角色增加菜单。先删除角色下旧的全部菜单，再增加
+   *
+   * @param roleMenuAdd 全量菜单
    */
-  Message addMenu(RoleMenuAdd roleMenuAdd);
+  Boolean addMenu(RoleMenuAdd roleMenuAdd);
 
-  /**
-   * 角色删除用户
-   */
-  Message deleteUser(RoleUserDel roleUserDel);
-
-  /**
-   * 角色删除菜单
-   */
-  boolean deleteMenu(RoleMenuDel roleMenuDel);
 }

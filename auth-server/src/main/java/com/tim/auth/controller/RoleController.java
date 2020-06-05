@@ -8,7 +8,6 @@ import com.tim.auth.vo.RoleMenuAdd;
 import com.tim.auth.vo.RoleSearchReq;
 import com.tim.auth.vo.RoleUpdate;
 import com.tim.auth.vo.RoleUserAdd;
-import com.tim.auth.vo.RoleUserDel;
 import com.tim.auth.vo.UserSearchResp;
 import com.tim.message.Message;
 import io.swagger.annotations.Api;
@@ -16,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,19 +51,22 @@ public class RoleController {
   @ApiOperation(value = "删除角色")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
-    return roleService.delete(id);
+    roleService.delete(id);
+    return Message.success();
   }
 
   @ApiOperation(value = "新增角色")
   @RequestMapping(method = RequestMethod.POST)
   public Message add(@RequestBody RoleAdd roleAdd) {
-    return roleService.add(roleAdd);
+    roleService.add(roleAdd);
+    return Message.success();
   }
 
   @ApiOperation(value = "修改角色")
   @RequestMapping(method = RequestMethod.PUT)
   public Message update(@RequestBody RoleUpdate roleUpdate) {
-    return roleService.update(roleUpdate);
+    roleService.update(roleUpdate);
+    return Message.success();
   }
 
   @ApiOperation(value = "获取角色信息")
@@ -77,13 +78,8 @@ public class RoleController {
   @ApiOperation(value = "角色增加用户")
   @PostMapping("/user")
   public Message addUser(@RequestBody RoleUserAdd roleUserAdd) {
-    return roleService.addUser(roleUserAdd);
-  }
-
-  @ApiOperation(value = "角色删除用户")
-  @DeleteMapping("/user")
-  public Message deleteUser(@RequestBody RoleUserDel roleUserDel) {
-    return roleService.deleteUser(roleUserDel);
+    roleService.addUser(roleUserAdd);
+    return Message.success();
   }
 
   @ApiOperation(value = "根据角色id列出菜单")
@@ -95,7 +91,8 @@ public class RoleController {
   @ApiOperation(value = "角色增加菜单")
   @PostMapping("/menu")
   public Message addMenu(@RequestBody RoleMenuAdd roleMenuAdd) {
-    return roleService.addMenu(roleMenuAdd);
+    roleService.addMenu(roleMenuAdd);
+    return Message.success();
   }
 
   @ApiOperation(value = "获取角色下用户")

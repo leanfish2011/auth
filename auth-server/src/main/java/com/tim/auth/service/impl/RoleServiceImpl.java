@@ -3,6 +3,7 @@ package com.tim.auth.service.impl;
 import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.dao.RoleMapper;
+import com.tim.auth.exception.NotModifyException;
 import com.tim.auth.po.Role;
 import com.tim.auth.po.RoleExample;
 import com.tim.auth.po.RoleExample.Criteria;
@@ -12,13 +13,10 @@ import com.tim.auth.service.RoleService;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.vo.RoleAdd;
 import com.tim.auth.vo.RoleMenuAdd;
-import com.tim.auth.vo.RoleMenuDel;
 import com.tim.auth.vo.RoleSearchReq;
 import com.tim.auth.vo.RoleSearchResp;
 import com.tim.auth.vo.RoleUpdate;
 import com.tim.auth.vo.RoleUserAdd;
-import com.tim.auth.vo.RoleUserDel;
-import com.tim.message.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -77,7 +75,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public boolean isExist(String name) {
+  public Boolean isExist(String name) {
     RoleExample example = new RoleExample();
     Criteria criteria = example.createCriteria();
 
@@ -88,33 +86,28 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public Message add(RoleAdd roleAdd) {
+  public Boolean add(RoleAdd roleAdd) {
     Role role = new Role();
     BeanUtils.copyProperties(roleAdd, role);
     String id = UUID.randomUUID().toString();
     role.setId(id);
     role.setCreatorId(tokenManager.getUserId());
 
-    int row = roleMapper.insertSelective(role);
-    if (row == 1) {
-      return Message.success("新增角色成功！");
-    }
+    roleMapper.insertSelective(role);
 
-    return Message.error("新增角色失败！");
+    log.info("新增角色成功！");
+    return true;
   }
 
   @Override
-  public Message update(RoleUpdate roleUpdate) {
+  public Boolean update(RoleUpdate roleUpdate) {
     Role role = new Role();
     BeanUtils.copyProperties(roleUpdate, role);
     role.setModifierId(tokenManager.getUserId());
 
-    int row = roleMapper.updateByPrimaryKeySelective(role);
-    if (row == 1) {
-      return Message.success("更新角色成功！");
-    }
-
-    return Message.error("更新角色失败！");
+    roleMapper.updateByPrimaryKeySelective(role);
+    log.info("更新角色成功！");
+    return true;
   }
 
   @Override
@@ -128,10 +121,10 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-  public Message delete(String id) {
+  public Boolean delete(String id) {
     if (id.equals(AuthConstant.ROLE_ADMIN_ID) || id.equals(AuthConstant.ROLE_COMMON_ID)) {
       log.warn("系统内置角色不能删除，id:{}", id);
-      return Message.error("系统内置角色不能删除！");
+      throw new NotModifyException("系统内置角色不能删除！");
     }
 
     //从角色用户表，删除角色
@@ -146,27 +139,29 @@ public class RoleServiceImpl implements RoleService {
     //刷新redis
     loadResourceRole.load();
 
-    return Message.success("角色删除成功！");
+    log.info("角色删除成功！");
+    return true;
   }
 
   @Override
-  public Message addUser(RoleUserAdd roleUserAdd) {
+  public Boolean addUser(RoleUserAdd roleUserAdd) {
     //先删除旧的用户
     roleUserService.deleteRole(roleUserAdd.getRoleId());
 
     //刷新redis
     loadResourceRole.load();
     roleUserService.addUser(roleUserAdd);
+    log.info("角色分配用户成功！");
 
-    return Message.success();
+    return true;
   }
 
   @Override
-  public Message addMenu(RoleMenuAdd roleMenuAdd) {
+  public Boolean addMenu(RoleMenuAdd roleMenuAdd) {
     String roleId = roleMenuAdd.getRoleId();
     if (roleId.equals(AuthConstant.ROLE_ADMIN_ID) || roleId.equals(AuthConstant.ROLE_COMMON_ID)) {
       log.warn("系统内置角色权限不能修改，id:{}", roleId);
-      return Message.error("系统内置角色权限不能修改！");
+      throw new NotModifyException("系统内置角色权限不能修改！");
     }
 
     //先删除旧的菜单分配
@@ -176,22 +171,9 @@ public class RoleServiceImpl implements RoleService {
     loadResourceRole.load();
 
     roleMenuService.addMenu(roleMenuAdd);
+    log.info("角色分配权限成功！");
 
-    return Message.success();
+    return true;
   }
 
-  @Override
-  public Message deleteUser(RoleUserDel roleUserDel) {
-    boolean result = roleUserService.deleteUser(roleUserDel);
-    if (!result) {
-      return Message.error();
-    }
-
-    return Message.success();
-  }
-
-  @Override
-  public boolean deleteMenu(RoleMenuDel roleMenuDel) {
-    return roleMenuService.deleteMenu(roleMenuDel);
-  }
 }

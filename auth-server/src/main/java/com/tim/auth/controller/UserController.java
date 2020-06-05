@@ -41,21 +41,21 @@ public class UserController {
   @RequestMapping(method = RequestMethod.POST)
   public Message add(@RequestBody UserAdd userAdd) {
     userService.add(userAdd);
-    return Message.success("新增用户成功！");
+    return Message.success();
   }
 
   @ApiOperation(value = "修改用户")
   @RequestMapping(method = RequestMethod.PUT)
   public Message update(@RequestBody UserUpdate userUpdate) {
     userService.update(userUpdate);
-    return Message.success("更新用户成功！");
+    return Message.success();
   }
 
   @ApiOperation(value = "删除用户")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
     userService.delete(id);
-    return Message.success("删除用户成功！");
+    return Message.success();
   }
 
 }
