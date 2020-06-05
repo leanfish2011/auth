@@ -8,15 +8,15 @@ public interface RoleMenuService {
   /**
    * 角色增加菜单
    */
-  boolean addMenu(RoleMenuAdd roleMenuAdd);
+  Boolean addMenu(RoleMenuAdd roleMenuAdd);
 
   /**
    * 角色删除菜单
    */
-  boolean deleteMenu(RoleMenuDel roleMenuDel);
+  Boolean deleteMenu(RoleMenuDel roleMenuDel);
 
   /**
    * 根据角色id删除
    */
-  boolean deleteRole(String roleId);
+  Boolean deleteRole(String roleId);
 }

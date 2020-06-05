@@ -13,20 +13,20 @@ public interface RoleUserService {
   /**
    * 角色增加用户
    */
-  boolean addUser(RoleUserAdd roleUserAdd);
+  Boolean addUser(RoleUserAdd roleUserAdd);
 
   /**
    * 角色删除用户
    */
-  boolean deleteUser(RoleUserDel roleUserDel);
+  Boolean deleteUser(RoleUserDel roleUserDel);
 
   /**
    * 根据用户id删除
    */
-  boolean deleteUser(String userId);
+  Boolean deleteUser(String userId);
 
   /**
    * 根据角色id删除
    */
-  boolean deleteRole(String roleId);
+  Boolean deleteRole(String roleId);
 }

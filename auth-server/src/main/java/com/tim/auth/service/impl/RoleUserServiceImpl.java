@@ -27,7 +27,7 @@ public class RoleUserServiceImpl implements RoleUserService {
   private TokenManager tokenManager;
 
   @Override
-  public boolean addUser(RoleUserAdd roleUserAdd) {
+  public Boolean addUser(RoleUserAdd roleUserAdd) {
     String roleId = roleUserAdd.getRoleId();
     List<String> userIdList = roleUserAdd.getUserIdList();
 
@@ -45,7 +45,7 @@ public class RoleUserServiceImpl implements RoleUserService {
   }
 
   @Override
-  public boolean deleteUser(RoleUserDel roleUserDel) {
+  public Boolean deleteUser(RoleUserDel roleUserDel) {
     String roleId = roleUserDel.getRoleId();
     List<String> userIdList = roleUserDel.getUserIdList();
 
@@ -58,7 +58,7 @@ public class RoleUserServiceImpl implements RoleUserService {
   }
 
   @Override
-  public boolean deleteUser(String userId) {
+  public Boolean deleteUser(String userId) {
     RoleUserExample roleUserExample = new RoleUserExample();
     RoleUserExample.Criteria criteria = roleUserExample.createCriteria();
     criteria.andUseridEqualTo(userId);
@@ -68,7 +68,7 @@ public class RoleUserServiceImpl implements RoleUserService {
   }
 
   @Override
-  public boolean deleteRole(String roleId) {
+  public Boolean deleteRole(String roleId) {
     RoleUserExample roleUserExample = new RoleUserExample();
     RoleUserExample.Criteria criteria = roleUserExample.createCriteria();
     criteria.andRoleidEqualTo(roleId);
