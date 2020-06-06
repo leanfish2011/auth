@@ -22,8 +22,8 @@ public class AuthExceptionHandler {
    */
   @ResponseBody
   @ExceptionHandler(InvalidTokenException.class)
-  public Message myErrorHandler(InvalidTokenException ex) {
+  public Message authHandler() {
     return new Message(AuthCode.INVALIDTOKEN, AuthCode.INVALIDTOKEN_MSG);
-
   }
+
 }

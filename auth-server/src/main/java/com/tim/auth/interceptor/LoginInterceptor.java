@@ -26,15 +26,7 @@ public class LoginInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
-    //检查token是否有效
-    boolean isSuccess = accessService.check();
-    if (isSuccess) {
-      return true;
-    }
-
-    //TODO
-    //ResponseUtil.responseOutWithJson(response, message);
-    return false;
+    return accessService.check();
   }
 
   @Override
