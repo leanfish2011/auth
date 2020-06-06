@@ -2,8 +2,6 @@ package com.tim.auth.component;
 
 import com.tim.auth.exception.NoAccessException;
 import com.tim.auth.exception.NotFoundException;
-import com.tim.exception.type.CommonException;
-import com.tim.message.Message;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
