@@ -82,7 +82,7 @@ public class RoleController {
     return Message.success();
   }
 
-  @ApiOperation(value = "根据角色id列出菜单")
+  @ApiOperation(value = "根据角色id列出菜单(只列出叶子节点)")
   @GetMapping("/menu/{roleId}")
   public Message<List<String>> listMenuRole(@PathVariable String roleId) {
     return Message.success(menuService.listMenuRole(roleId));
