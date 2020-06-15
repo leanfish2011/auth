@@ -148,9 +148,11 @@ public class RoleServiceImpl implements RoleService {
     //先删除旧的用户
     roleUserService.deleteRole(roleUserAdd.getRoleId());
 
+    roleUserService.addUser(roleUserAdd);
+
     //刷新redis
     loadResourceRole.load();
-    roleUserService.addUser(roleUserAdd);
+
     log.info("角色分配用户成功！");
 
     return true;
@@ -167,10 +169,12 @@ public class RoleServiceImpl implements RoleService {
     //先删除旧的菜单分配
     roleMenuService.deleteRole(roleMenuAdd.getRoleId());
 
+    //增加新的菜单
+    roleMenuService.addMenu(roleMenuAdd);
+
     //刷新redis
     loadResourceRole.load();
 
-    roleMenuService.addMenu(roleMenuAdd);
     log.info("角色分配权限成功！");
 
     return true;
