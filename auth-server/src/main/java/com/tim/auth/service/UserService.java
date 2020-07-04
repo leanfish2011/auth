@@ -1,6 +1,7 @@
 package com.tim.auth.service;
 
 import com.tim.auth.vo.UserAdd;
+import com.tim.auth.vo.UserSearchRespData;
 import com.tim.auth.vo.UserUpdate;
 import java.util.List;
 import com.tim.auth.vo.UserSearchReq;
@@ -9,7 +10,7 @@ import com.tim.auth.po.User;
 
 public interface UserService {
 
-  List<UserSearchResp> search(UserSearchReq userSearchReq);
+  UserSearchRespData search(UserSearchReq userSearchReq);
 
   Boolean isExist(String userCode);
 

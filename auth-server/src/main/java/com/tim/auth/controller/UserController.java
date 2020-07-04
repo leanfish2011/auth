@@ -4,8 +4,8 @@ import com.tim.auth.service.UserService;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
+import com.tim.auth.vo.UserSearchRespData;
 import com.tim.auth.vo.UserUpdate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +27,7 @@ public class UserController {
 
   @ApiOperation(value = "查询用户")
   @RequestMapping(method = RequestMethod.GET)
-  public Message<List<UserSearchResp>> search(UserSearchReq userSearchReq) {
+  public Message<UserSearchRespData> search(UserSearchReq userSearchReq) {
     return Message.success(userService.search(userSearchReq));
   }
 

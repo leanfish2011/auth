@@ -103,6 +103,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limitRange != null">
+      limit ${limitRange}
+    </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap"
     parameterType="java.lang.String">

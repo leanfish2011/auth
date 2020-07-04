@@ -11,6 +11,7 @@ import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
+import com.tim.auth.vo.UserSearchRespData;
 import com.tim.auth.vo.UserUpdate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,38 +45,53 @@ public class UserServiceImpl implements UserService {
   private LoadResourceRole loadResourceRole;
 
   @Override
-  public List<UserSearchResp> search(UserSearchReq userSearchReq) {
-    UserExample example = new UserExample();
-    Criteria criteria = example.createCriteria();
+  public UserSearchRespData search(UserSearchReq userSearchReq) {
+    UserExample userExample = new UserExample();
+    Criteria criteria = userExample.createCriteria();
 
-    if (!StringUtils.isEmpty(userSearchReq.getName())) {
-      criteria.andNameLike("%" + userSearchReq.getName() + "%");
+    if (userSearchReq != null) {
+      if (!StringUtils.isEmpty(userSearchReq.getName())) {
+        criteria.andNameLike("%" + userSearchReq.getName() + "%");
+      }
+
+      if (!StringUtils.isEmpty(userSearchReq.getUserCode())) {
+        criteria.andUsercodeLike("%" + userSearchReq.getUserCode() + "%");
+      }
+
+      if (userSearchReq.getBeginTime() != null && userSearchReq.getEndTime() != null) {
+        criteria.andCreateTimeBetween(userSearchReq.getBeginTime(), userSearchReq.getEndTime());
+      }
+
+      if (!StringUtils.isEmpty(userSearchReq.getEmail())) {
+        criteria.andEmailLike("%" + userSearchReq.getEmail() + "%");
+      }
+
+      Integer pageNo = userSearchReq.getPageNo();
+      Integer pageSize = userSearchReq.getPageSize();
+      if (pageNo != null && pageSize != null) {
+        userExample.setLimitRange((pageNo - 1) * pageSize + "," + pageSize);
+      }
     }
 
-    if (!StringUtils.isEmpty(userSearchReq.getUserCode())) {
-      criteria.andUsercodeLike("%" + userSearchReq.getUserCode() + "%");
-    }
+    userExample.setOrderByClause(" create_time asc");
 
-    if (userSearchReq.getBeginTime() != null && userSearchReq.getEndTime() != null) {
-      criteria.andCreateTimeBetween(userSearchReq.getBeginTime(), userSearchReq.getEndTime());
-    }
-
-    if (!StringUtils.isEmpty(userSearchReq.getEmail())) {
-      criteria.andEmailLike("%" + userSearchReq.getEmail() + "%");
-    }
-
-    example.setOrderByClause(" create_time asc");
-
-    List<User> users = userMapper.selectByExample(example);
-    List<UserSearchResp> list = new ArrayList<UserSearchResp>();
+    List<User> users = userMapper.selectByExample(userExample);
+    List<UserSearchResp> userSearchRespList = new ArrayList<>();
     for (User user : users) {
       UserSearchResp response = new UserSearchResp();
       BeanUtils.copyProperties(user, response);
 
-      list.add(response);
+      userSearchRespList.add(response);
     }
 
-    return list;
+    int allTotal = userMapper.countByExample(userExample);
+
+    UserSearchRespData userSearchRespData = new UserSearchRespData();
+    userSearchRespData.setAllTotal(allTotal);
+    userSearchRespData.setCurrentTotal(userSearchRespList.size());
+    userSearchRespData.setList(userSearchRespList);
+
+    return userSearchRespData;
   }
 
   @Override
