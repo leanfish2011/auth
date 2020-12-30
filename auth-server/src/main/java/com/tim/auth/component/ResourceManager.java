@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.tim.auth.ao.ResourceRole;
@@ -21,6 +22,9 @@ public class ResourceManager {
 
   @Autowired
   private TokenManager tokenManager;
+
+  @Value("${super.token}")
+  private String superToken;
 
   /**
    * 加载资源权限到redis中
@@ -49,6 +53,10 @@ public class ResourceManager {
     Object urlRoleIdsObj = redisTemplate.opsForValue().get(checkUri);
     if (urlRoleIdsObj == null) {
       throw new NotFoundException("资源不存在");
+    }
+
+    if (token.equals(superToken)) {
+      return true;
     }
 
     //鉴权：判断url需要的角色，是否在用户所属角色中
