@@ -14,4 +14,5 @@ public class RegisterReq {
   private String password;
   private String name;
   private String email;
+  private String photourl;
 }

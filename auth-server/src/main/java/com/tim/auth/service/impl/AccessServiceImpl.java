@@ -296,6 +296,7 @@ public class AccessServiceImpl implements AccessService {
     loginResp.setUserCode(user.getUserCode());
     loginResp.setUserId(user.getId());
     loginResp.setName(user.getName());
+    loginResp.setPhotourl(user.getPhotourl());
 
     UserRole userRole = userMapper.selectUserRole(user.getId());
     loginResp.setRoleIds(userRole.getRoleIds());

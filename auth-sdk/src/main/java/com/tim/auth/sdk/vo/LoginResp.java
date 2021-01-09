@@ -32,6 +32,11 @@ public class LoginResp implements Serializable {
   private String name;
 
   /**
+   * 用户头像
+   */
+  private String photourl;
+
+  /**
    * 拥有资源角色id集合
    */
   private String roleIds;
