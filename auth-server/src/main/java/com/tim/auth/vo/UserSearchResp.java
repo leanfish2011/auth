@@ -18,4 +18,5 @@ public class UserSearchResp {
   private Date createTime;
   private Date modifiedTime;
   private String password;
+  private String photourl;
 }
