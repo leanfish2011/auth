@@ -235,6 +235,7 @@ public class AccessServiceImpl implements AccessService {
     registerReq.setPassword(UserInfoConstant.USER_PASSWORD);
     registerReq.setName(githubUser.getName());
     registerReq.setEmail(githubUser.getEmail());
+    registerReq.setPhotourl(githubUser.getAvatarUrl());
 
     boolean isSuccess = this.register(registerReq);
     if (isSuccess) {
