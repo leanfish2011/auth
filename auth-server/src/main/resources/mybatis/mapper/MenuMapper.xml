@@ -87,7 +87,7 @@
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List"/>
-    from sys_menu
+    from auth_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
@@ -98,21 +98,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
     <include refid="Base_Column_List"/>
-    from sys_menu
+    from auth_menu
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from sys_menu
+    delete from auth_menu
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.tim.auth.po.MenuExample">
-    delete from sys_menu
+    delete from auth_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
   </delete>
   <insert id="insert" parameterType="com.tim.auth.po.Menu">
-    insert into sys_menu (id, create_time, creator_id,
+    insert into auth_menu (id, create_time, creator_id,
       modified_time, modifier_id, name,
       url, request_path, parent_id,
       sort_num, is_show)
@@ -122,7 +122,7 @@
       #{sortNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.tim.auth.po.Menu">
-    insert into sys_menu
+    insert into auth_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -193,13 +193,13 @@
   </insert>
   <select id="countByExample" parameterType="com.tim.auth.po.MenuExample"
     resultType="java.lang.Integer">
-    select count(*) from sys_menu
+    select count(*) from auth_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update sys_menu
+    update auth_menu
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
@@ -240,7 +240,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update sys_menu
+    update auth_menu
     set id = #{record.id,jdbcType=VARCHAR},
     create_time = #{record.createTime,jdbcType=TIMESTAMP},
     creator_id = #{record.creatorId,jdbcType=VARCHAR},
@@ -257,7 +257,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tim.auth.po.Menu">
-    update sys_menu
+    update auth_menu
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -293,7 +293,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tim.auth.po.Menu">
-    update sys_menu
+    update auth_menu
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       creator_id = #{creatorId,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
@@ -310,12 +310,12 @@
   <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
     <include refid="Base_Column_List"/>
-    from sys_menu m
+    from auth_menu m
     where m.id in
     (select distinct menuid
-    from sys_rolemenu
+    from auth_rolemenu
     where roleid in
-    (select roleid from sys_roleuser where userid=#{userId,jdbcType=VARCHAR}))
+    (select roleid from auth_roleuser where userid=#{userId,jdbcType=VARCHAR}))
     and m.is_show=1
     order by m.sort_num
   </select>
@@ -323,13 +323,13 @@
   <select id="selectByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
     select
     k.id
-    from sys_menu k where id not in (
+    from auth_menu k where id not in (
     select distinct
     m.id
-    from sys_menu m inner join sys_menu n
+    from auth_menu m inner join auth_menu n
     on m.id=n.parent_id)
         and k.id in
-    (select menuid from sys_rolemenu where roleid=#{roleId,jdbcType=VARCHAR})
+    (select menuid from auth_rolemenu where roleid=#{roleId,jdbcType=VARCHAR})
     order by k.sort_num
   </select>
 </mapper>

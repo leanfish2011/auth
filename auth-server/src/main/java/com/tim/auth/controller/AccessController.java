@@ -2,10 +2,10 @@ package com.tim.auth.controller;
 
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.service.AccessService;
-import com.tim.auth.vo.LoginReq;
+import com.tim.auth.sdk.vo.LoginReq;
 import com.tim.auth.sdk.vo.LoginResp;
-import com.tim.auth.vo.RegisterReq;
-import com.tim.auth.vo.UpdatePwdReq;
+import com.tim.auth.sdk.vo.RegisterReq;
+import com.tim.auth.sdk.vo.UpdatePwdReq;
 import com.tim.message.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

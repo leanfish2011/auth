@@ -1,7 +1,7 @@
 package com.tim.auth.service;
 
-import com.tim.auth.vo.RoleUserAdd;
-import com.tim.auth.vo.RoleUserDel;
+import com.tim.auth.sdk.vo.RoleUserAdd;
+import com.tim.auth.sdk.vo.RoleUserDel;
 
 /**
  * @author：tim

@@ -1,10 +1,10 @@
 package com.tim.auth.service;
 
 import com.tim.auth.sdk.vo.TokenModel;
-import com.tim.auth.vo.LoginReq;
+import com.tim.auth.sdk.vo.LoginReq;
 import com.tim.auth.sdk.vo.LoginResp;
-import com.tim.auth.vo.RegisterReq;
-import com.tim.auth.vo.UpdatePwdReq;
+import com.tim.auth.sdk.vo.RegisterReq;
+import com.tim.auth.sdk.vo.UpdatePwdReq;
 import java.util.List;
 import com.tim.auth.ao.ResourceRole;
 

@@ -1,14 +1,11 @@
 package com.tim.auth.service;
 
-import com.tim.auth.vo.RoleAdd;
-import com.tim.auth.vo.RoleMenuAdd;
-import com.tim.auth.vo.RoleMenuDel;
-import com.tim.auth.vo.RoleSearchReq;
-import com.tim.auth.vo.RoleSearchResp;
-import com.tim.auth.vo.RoleUpdate;
-import com.tim.auth.vo.RoleUserAdd;
-import com.tim.auth.vo.RoleUserDel;
-import com.tim.message.Message;
+import com.tim.auth.sdk.vo.RoleAdd;
+import com.tim.auth.sdk.vo.RoleMenuAdd;
+import com.tim.auth.sdk.vo.RoleSearchReq;
+import com.tim.auth.sdk.vo.RoleSearchResp;
+import com.tim.auth.sdk.vo.RoleUpdate;
+import com.tim.auth.sdk.vo.RoleUserAdd;
 import java.util.List;
 
 public interface RoleService {

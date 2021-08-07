@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "${auth.server.name:auth-server}", path = "/api/v1/auth/access", configuration = FeignConfiguration.class)
+@FeignClient(name = "${auth.server.name:auth-server}", path = "/api/galaxy/v2/auth/access", configuration = FeignConfiguration.class)
 public interface AccountFeignClient {
 
   @RequestMapping(value = "/check", method = RequestMethod.GET)

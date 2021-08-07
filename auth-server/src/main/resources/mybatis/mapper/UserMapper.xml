@@ -96,7 +96,7 @@
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List"/>
-    from sys_user
+    from auth_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
@@ -111,22 +111,22 @@
     parameterType="java.lang.String">
     select
     <include refid="Base_Column_List"/>
-    from sys_user
+    from auth_user
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from
-		sys_user
+		auth_user
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
   <delete id="deleteByExample" parameterType="com.tim.auth.po.UserExample">
-    delete from sys_user
+    delete from auth_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
   </delete>
   <insert id="insert" parameterType="com.tim.auth.po.User">
-		insert into sys_user (id,
+		insert into auth_user (id,
 		create_time, creator_id,
 		modified_time, modifier_id, usercode,
 		password, name, email,
@@ -142,7 +142,7 @@
 		#{photoFingerprint,jdbcType=VARCHAR})
 	</insert>
   <insert id="insertSelective" parameterType="com.tim.auth.po.User">
-    insert into sys_user
+    insert into auth_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -216,13 +216,13 @@
   </insert>
   <select id="countByExample" parameterType="com.tim.auth.po.UserExample"
     resultType="java.lang.Integer">
-    select count(*) from sys_user
+    select count(*) from auth_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update sys_user
+    update auth_user
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
@@ -265,7 +265,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update sys_user
+    update auth_user
     set id = #{record.id,jdbcType=VARCHAR},
     create_time =
     #{record.createTime,jdbcType=TIMESTAMP},
@@ -292,7 +292,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tim.auth.po.User">
-    update sys_user
+    update auth_user
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -328,7 +328,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tim.auth.po.User">
-		update sys_user
+		update auth_user
 		set create_time =
 		#{createTime,jdbcType=TIMESTAMP},
 		creator_id =
@@ -363,22 +363,22 @@
 		select
 		a.requestPath,group_concat(a.roleid) roleIds from (
 		select m.request_path requestPath,
-		rm.roleid from sys_menu m inner join
-		sys_rolemenu rm on m.id=rm.menuid
+		rm.roleid from auth_menu m inner join
+		auth_rolemenu rm on m.id=rm.menuid
 		where m.request_path!='') a group by
 		a.requestPath
 	</select>
 
   <select id="selectByRoleId" resultMap="BaseResultMap"
     parameterType="java.lang.String">
-    select u.* from sys_user u inner join sys_roleuser ru
+    select u.* from auth_user u inner join auth_roleuser ru
     on u.id=ru.userid
     where ru.roleid=#{roleId,jdbcType=VARCHAR}
   </select>
 
   <select id="selectUserRole" resultMap="UserRole">
     select userid,group_concat(roleid) roleIds
-    from ishou_auth.sys_roleuser
+    from auth_roleuser
     where userid=#{userId,jdbcType=VARCHAR}
     group by userid
 	</select>
