@@ -8,39 +8,35 @@ import com.tim.auth.vo.RoleSearchResp;
 import com.tim.auth.vo.RoleUpdate;
 import com.tim.auth.vo.RoleUserAdd;
 import com.tim.auth.vo.RoleUserDel;
+import com.tim.message.Message;
 import java.util.List;
 
 public interface RoleService {
 
   List<RoleSearchResp> search(RoleSearchReq roleSearchReq);
 
-  boolean isExist(String name);
+  Boolean isExist(String name);
 
-  boolean add(RoleAdd roleAdd);
+  Boolean add(RoleAdd roleAdd);
 
-  boolean update(RoleUpdate roleUpdate);
+  Boolean update(RoleUpdate roleUpdate);
 
   RoleSearchResp select(String id);
 
-  boolean delete(String id);
+  Boolean delete(String id);
 
   /**
-   * 角色增加用户
+   * 角色增加用户。先删除角色下旧的全部用户，再增加
+   *
+   * @param roleUserAdd 全量用户
    */
-  boolean addUser(RoleUserAdd roleUserAdd);
+  Boolean addUser(RoleUserAdd roleUserAdd);
 
   /**
-   * 角色增加菜单
+   * 角色增加菜单。先删除角色下旧的全部菜单，再增加
+   *
+   * @param roleMenuAdd 全量菜单
    */
-  boolean addMenu(RoleMenuAdd roleMenuAdd);
+  Boolean addMenu(RoleMenuAdd roleMenuAdd);
 
-  /**
-   * 角色删除用户
-   */
-  boolean deleteUser(RoleUserDel roleUserDel);
-
-  /**
-   * 角色删除菜单
-   */
-  boolean deleteMenu(RoleMenuDel roleMenuDel);
 }

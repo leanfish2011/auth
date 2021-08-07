@@ -27,7 +27,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
   private TokenManager tokenManager;
 
   @Override
-  public boolean addMenu(RoleMenuAdd roleMenuAdd) {
+  public Boolean addMenu(RoleMenuAdd roleMenuAdd) {
     String roleId = roleMenuAdd.getRoleId();
     List<String> menuIdList = roleMenuAdd.getMenuIdList();
     for (String menuId : menuIdList) {
@@ -44,7 +44,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
   }
 
   @Override
-  public boolean deleteMenu(RoleMenuDel roleMenuDel) {
+  public Boolean deleteMenu(RoleMenuDel roleMenuDel) {
     String roleId = roleMenuDel.getRoleId();
     List<String> menuIdList = roleMenuDel.getMenuIdList();
     RoleMenuExample roleMenuExample = new RoleMenuExample();
@@ -56,7 +56,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
   }
 
   @Override
-  public boolean deleteRole(String roleId) {
+  public Boolean deleteRole(String roleId) {
     RoleMenuExample roleMenuExample = new RoleMenuExample();
     RoleMenuExample.Criteria criteria = roleMenuExample.createCriteria();
     criteria.andRoleidEqualTo(roleId);

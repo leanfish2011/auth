@@ -24,11 +24,7 @@ public class RequestManager {
         request.getHeader("authorization") == null ? request.getHeader("Authorization")
             : request.getHeader("authorization");
 
-    if (StringUtils.isEmpty(token)) {
-      return null;
-    }
-
-    return token.trim();
+    return StringUtils.isEmpty(token) ? null : token.trim();
   }
 
   /**

@@ -1,8 +1,8 @@
 package com.tim.auth.service;
 
 import com.tim.auth.vo.UserAdd;
+import com.tim.auth.vo.UserSearchRespData;
 import com.tim.auth.vo.UserUpdate;
-import com.tim.message.Message;
 import java.util.List;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
@@ -10,17 +10,19 @@ import com.tim.auth.po.User;
 
 public interface UserService {
 
-  List<UserSearchResp> search(UserSearchReq userSearchReq);
+  UserSearchRespData search(UserSearchReq userSearchReq);
 
-  boolean isExist(String userCode);
+  Boolean isExist(String userCode);
 
-  boolean add(UserAdd userAdd);
+  Boolean add(UserAdd userAdd);
 
-  Message update(UserUpdate userUpdate);
+  Boolean update(UserUpdate userUpdate);
 
   UserSearchResp select(String id);
 
-  boolean delete(String id);
+  Boolean delete(String id);
 
   List<UserSearchResp> roleUser(String roleId);
+
+  User findOne(String userCode);
 }

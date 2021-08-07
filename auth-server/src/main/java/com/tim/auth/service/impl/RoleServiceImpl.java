@@ -1,25 +1,26 @@
 package com.tim.auth.service.impl;
 
-import com.tim.auth.component.LoadResourceUser;
+import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.component.TokenManager;
 import com.tim.auth.dao.RoleMapper;
+import com.tim.auth.exception.NotModifyException;
 import com.tim.auth.po.Role;
 import com.tim.auth.po.RoleExample;
 import com.tim.auth.po.RoleExample.Criteria;
+import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.RoleMenuService;
 import com.tim.auth.service.RoleService;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.vo.RoleAdd;
 import com.tim.auth.vo.RoleMenuAdd;
-import com.tim.auth.vo.RoleMenuDel;
 import com.tim.auth.vo.RoleSearchReq;
 import com.tim.auth.vo.RoleSearchResp;
 import com.tim.auth.vo.RoleUpdate;
 import com.tim.auth.vo.RoleUserAdd;
-import com.tim.auth.vo.RoleUserDel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @description：
  */
 @Service
+@Slf4j
 public class RoleServiceImpl implements RoleService {
 
   @Autowired
@@ -47,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
   private TokenManager tokenManager;
 
   @Autowired
-  private LoadResourceUser loadResourceUser;
+  private LoadResourceRole loadResourceRole;
 
   @Override
   public List<RoleSearchResp> search(RoleSearchReq roleSearchReq) {
@@ -73,7 +75,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public boolean isExist(String name) {
+  public Boolean isExist(String name) {
     RoleExample example = new RoleExample();
     Criteria criteria = example.createCriteria();
 
@@ -84,23 +86,28 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public boolean add(RoleAdd roleAdd) {
+  public Boolean add(RoleAdd roleAdd) {
     Role role = new Role();
     BeanUtils.copyProperties(roleAdd, role);
     String id = UUID.randomUUID().toString();
     role.setId(id);
     role.setCreatorId(tokenManager.getUserId());
 
-    return roleMapper.insertSelective(role) == 1 ? true : false;
+    roleMapper.insertSelective(role);
+
+    log.info("新增角色成功！");
+    return true;
   }
 
   @Override
-  public boolean update(RoleUpdate roleUpdate) {
+  public Boolean update(RoleUpdate roleUpdate) {
     Role role = new Role();
     BeanUtils.copyProperties(roleUpdate, role);
     role.setModifierId(tokenManager.getUserId());
 
-    return roleMapper.updateByPrimaryKeySelective(role) == 1 ? true : false;
+    roleMapper.updateByPrimaryKeySelective(role);
+    log.info("更新角色成功！");
+    return true;
   }
 
   @Override
@@ -114,7 +121,12 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-  public boolean delete(String id) {
+  public Boolean delete(String id) {
+    if (id.equals(AuthConstant.ROLE_ADMIN_ID) || id.equals(AuthConstant.ROLE_COMMON_ID)) {
+      log.warn("系统内置角色不能删除，id:{}", id);
+      throw new NotModifyException("系统内置角色不能删除！");
+    }
+
     //从角色用户表，删除角色
     roleUserService.deleteRole(id);
 
@@ -125,40 +137,47 @@ public class RoleServiceImpl implements RoleService {
     roleMapper.deleteByPrimaryKey(id);
 
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
+
+    log.info("角色删除成功！");
+    return true;
+  }
+
+  @Override
+  public Boolean addUser(RoleUserAdd roleUserAdd) {
+    //先删除旧的用户
+    roleUserService.deleteRole(roleUserAdd.getRoleId());
+
+    roleUserService.addUser(roleUserAdd);
+
+    //刷新redis
+    loadResourceRole.load();
+
+    log.info("角色分配用户成功！");
 
     return true;
   }
 
   @Override
-  public boolean addUser(RoleUserAdd roleUserAdd) {
-    //先删除旧的用户
-    roleUserService.deleteRole(roleUserAdd.getRoleId());
+  public Boolean addMenu(RoleMenuAdd roleMenuAdd) {
+    String roleId = roleMenuAdd.getRoleId();
+    if (roleId.equals(AuthConstant.ROLE_ADMIN_ID) || roleId.equals(AuthConstant.ROLE_COMMON_ID)) {
+      log.warn("系统内置角色权限不能修改，id:{}", roleId);
+      throw new NotModifyException("系统内置角色权限不能修改！");
+    }
 
-    //刷新redis
-    loadResourceUser.load();
-
-    return roleUserService.addUser(roleUserAdd);
-  }
-
-  @Override
-  public boolean addMenu(RoleMenuAdd roleMenuAdd) {
     //先删除旧的菜单分配
     roleMenuService.deleteRole(roleMenuAdd.getRoleId());
 
+    //增加新的菜单
+    roleMenuService.addMenu(roleMenuAdd);
+
     //刷新redis
-    loadResourceUser.load();
+    loadResourceRole.load();
 
-    return roleMenuService.addMenu(roleMenuAdd);
+    log.info("角色分配权限成功！");
+
+    return true;
   }
 
-  @Override
-  public boolean deleteUser(RoleUserDel roleUserDel) {
-    return roleUserService.deleteUser(roleUserDel);
-  }
-
-  @Override
-  public boolean deleteMenu(RoleMenuDel roleMenuDel) {
-    return roleMenuService.deleteMenu(roleMenuDel);
-  }
 }

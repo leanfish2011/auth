@@ -2,8 +2,11 @@ package com.tim.auth.ao;
 
 import lombok.Data;
 
+/**
+ * 请求路径与角色关系
+ */
 @Data
-public class ResourceUser {
+public class ResourceRole {
 
   /**
    * 资源请求路径
@@ -11,7 +14,7 @@ public class ResourceUser {
   private String requestPath;
 
   /**
-   * 拥有资源用户id集合
+   * 拥有资源角色id集合
    */
-  private String userids;
+  private String roleIds;
 }

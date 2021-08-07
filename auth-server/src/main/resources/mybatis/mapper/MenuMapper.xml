@@ -322,11 +322,14 @@
 
   <select id="selectByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
     select
-    id
-    from sys_menu m
-    where m.parent_id is not null
-    and m.id in
+    k.id
+    from sys_menu k where id not in (
+    select distinct
+    m.id
+    from sys_menu m inner join sys_menu n
+    on m.id=n.parent_id)
+        and k.id in
     (select menuid from sys_rolemenu where roleid=#{roleId,jdbcType=VARCHAR})
-    order by m.sort_num
+    order by k.sort_num
   </select>
 </mapper>

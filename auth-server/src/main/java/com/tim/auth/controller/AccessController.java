@@ -39,51 +39,55 @@ public class AccessController {
   @ApiOperation(value = "登录")
   @PostMapping("/login")
   public Message<LoginResp> login(@RequestBody LoginReq loginReq) {
-    return accessService.login(loginReq);
+    return Message.success(accessService.login(loginReq));
   }
 
   @ApiOperation(value = "退出", notes = "需要登录,token放入Header中")
   @GetMapping("/logout")
   public Message logout() {
-    return accessService.logout();
+    accessService.logout();
+    return Message.success();
   }
 
   @ApiOperation(value = "注册")
   @PostMapping("/register")
   public Message register(@RequestBody RegisterReq registerReq) {
-    return accessService.register(registerReq);
+    accessService.register(registerReq);
+    return Message.success();
   }
 
   @ApiOperation(value = "通过token查自己信息", notes = "需要登录,token放入Header中")
   @GetMapping("/profile")
   public Message<TokenModel> profile() {
-    return accessService.profile();
+    return Message.success(accessService.profile());
   }
 
   @ApiOperation(value = "检查token是否有效", notes = "需要登录,token放入Header中")
   @GetMapping("/check")
   public Message check() {
-    return accessService.check();
+    accessService.check();
+    return Message.success();
   }
 
   @ApiOperation(value = "检查是否有权限", notes = "需要登录,token放入Header中")
   @RequestMapping(value = "/permission", method = RequestMethod.GET)
   public Message checkPermission(@RequestParam(value = "uri") String uri,
       @RequestParam(value = "method") String method) {
-    return accessService.checkPermission(uri, method);
+    accessService.checkPermission(uri, method);
+    return Message.success();
   }
 
   @ApiOperation(value = "修改密码", notes = "需要登录,token放入Header中")
   @PutMapping("/password")
   public Message updatePassword(@RequestBody @Validated UpdatePwdReq updatePwdReq) {
-    return accessService.updatePassword(updatePwdReq);
+    accessService.updatePassword(updatePwdReq);
+    return Message.success();
   }
 
   @ApiOperation(value = "github登录")
   @GetMapping("/login/github")
-  public Message githubLogin(String code) throws Exception {
-    log.info("github返回授权码：" + code);
-    return accessService.githubLogin(code);
+  public Message<LoginResp> githubLogin(String code) throws Exception {
+    return Message.success(accessService.githubLogin(code));
   }
 
 }

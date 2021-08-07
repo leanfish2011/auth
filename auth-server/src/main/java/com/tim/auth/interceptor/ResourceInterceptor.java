@@ -2,9 +2,6 @@ package com.tim.auth.interceptor;
 
 import com.tim.auth.component.RequestManager;
 import com.tim.auth.service.AccessService;
-import com.tim.util.ResponseUtil;
-import com.tim.message.MainCode;
-import com.tim.message.Message;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +27,8 @@ public class ResourceInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
-    Message message = accessService
+    return accessService
         .checkPermission(requestManager.getRequestURI(), requestManager.getRequestMethod());
-    if (message.getCode() == MainCode.SUCCESS) {
-      return true;
-    }
-
-    ResponseUtil.responseOutWithJson(response, message);
-    return false;
   }
 
   @Override

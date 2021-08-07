@@ -7,5 +7,8 @@ package com.tim.auth.constant;
  */
 public class UserInfoConstant {
 
+  /**
+   * 创建用户默认密码
+   */
   public static final String USER_PASSWORD = "123456";
 }

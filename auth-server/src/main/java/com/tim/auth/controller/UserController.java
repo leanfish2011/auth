@@ -1,12 +1,11 @@
 package com.tim.auth.controller;
 
-import com.tim.auth.sdk.constant.AuthConstant;
 import com.tim.auth.service.UserService;
 import com.tim.auth.vo.UserAdd;
 import com.tim.auth.vo.UserSearchReq;
 import com.tim.auth.vo.UserSearchResp;
+import com.tim.auth.vo.UserSearchRespData;
 import com.tim.auth.vo.UserUpdate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +27,8 @@ public class UserController {
 
   @ApiOperation(value = "查询用户")
   @RequestMapping(method = RequestMethod.GET)
-  public Message<List<UserSearchResp>> search(UserSearchReq userSearchReq) {
-    List<UserSearchResp> lstUser = userService.search(userSearchReq);
-
-    return Message.success(lstUser);
+  public Message<UserSearchRespData> search(UserSearchReq userSearchReq) {
+    return Message.success(userService.search(userSearchReq));
   }
 
   @ApiOperation(value = "获取用户信息")
@@ -43,37 +40,21 @@ public class UserController {
   @ApiOperation(value = "新增用户")
   @RequestMapping(method = RequestMethod.POST)
   public Message add(@RequestBody UserAdd userAdd) {
-    boolean isExist = userService.isExist(userAdd.getUserCode());
-    if (isExist) {
-      return Message.error("该用户名已经存在！");
-    }
-
-    boolean result = userService.add(userAdd);
-    if (!result) {
-      return Message.error("新增用户失败！");
-    }
-
-    return Message.success("新增用户成功！");
+    userService.add(userAdd);
+    return Message.success();
   }
 
   @ApiOperation(value = "修改用户")
   @RequestMapping(method = RequestMethod.PUT)
   public Message update(@RequestBody UserUpdate userUpdate) {
-    return userService.update(userUpdate);
+    userService.update(userUpdate);
+    return Message.success();
   }
 
   @ApiOperation(value = "删除用户")
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public Message delete(@PathVariable String id) {
-    if (id.equals(AuthConstant.USER_ADMIN_ID) || id.equals(AuthConstant.USER_COMMON_ID)) {
-      return Message.error("系统内置用户不能删除！");
-    }
-
-    boolean result = userService.delete(id);
-    if (!result) {
-      return Message.error();
-    }
-
+    userService.delete(id);
     return Message.success();
   }
 
