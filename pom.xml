@@ -22,7 +22,6 @@
 
   <properties>
     <dev-core.version>2.0-SNAPSHOT</dev-core.version>
-    <auth-sdk.version>2.0-SNAPSHOT</auth-sdk.version>
     <httpclient.version>4.5.6</httpclient.version>
   </properties>
 
@@ -38,7 +37,7 @@
       <dependency>
         <groupId>com.tim</groupId>
         <artifactId>auth-sdk</artifactId>
-        <version>${auth-sdk.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
