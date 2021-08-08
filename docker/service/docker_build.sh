@@ -18,10 +18,10 @@ service_name="auth-server"
 
 function build_image()
 {
-    docker_path=$(pwd)
-    echo "当前docker目录："$docker_path
+    work_path=$(pwd)
+    echo "当前目录："$work_path
 
-    cd ../
+    cd ../../
     project_path=$(pwd)
     echo "当前项目路径："$project_path
 
@@ -51,8 +51,8 @@ function build_image()
     echo "构建完成"
 
     # 将jar包拷贝到docker目录中
-    cp $project_path"/"$3"/target/"$jar_name $project_path"/docker"
-    cd $project_path"/docker"
+    cp $project_path"/"$3"/target/"$jar_name $project_path"/docker/service"
+    cd $project_path"/docker/service"
     ls
 
     # 构建镜像名称 工程名称:版本号_分支名称_日期_时间_commitid
