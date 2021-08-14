@@ -100,8 +100,8 @@ insert into auth_menu (`id`,`creator_id`,`name`,`parent_id`,`sort_num`,`is_show`
 insert into auth_menu (`id`,`creator_id`,`name`,`parent_id`,`sort_num`,`is_show`) values('2','0-admin','权限管理','0',2,1);
 
       -- 二级菜单-收藏管理
-insert into auth_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('3','0-admin','网页收藏','/site','/api/galaxy/v2/site/personal','1',3,1);
-insert into auth_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('8','0-admin','主页收藏','/homesite','/api/galaxy/v2/site/home','1',8,1);
+insert into auth_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('3','0-admin','网页收藏','/site','/api/ishou/v2/site/personal','1',3,1);
+insert into auth_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('8','0-admin','主页收藏','/homesite','/api/ishou/v2/site/home','1',8,1);
 
     -- 二级菜单-权限管理
 insert into  auth_menu (`id`,`creator_id`,`name`,`url`,`request_path`,`parent_id`,`sort_num`,`is_show`) values('4','0-admin','用户管理','/user','/api/galaxy/v2/auth/user','2',4,1);
