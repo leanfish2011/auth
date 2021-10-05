@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
       }
     }
 
-    userExample.setOrderByClause(" create_time asc");
+    userExample.setOrderByClause(" create_time desc");
 
     List<User> users = userMapper.selectByExample(userExample);
     List<UserSearchResp> userSearchRespList = new ArrayList<>();
