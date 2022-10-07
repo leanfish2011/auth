@@ -79,8 +79,8 @@ create table `auth_user` (
 
 -- 4、初始化数据
 -- 用户
-insert into auth_user (`id`,`creator_id`,`usercode`,`password`,`name`,`email`,`photourl`) values ('0-admin','0-admin','admin','123456','系统管理员','timjob@163.com','/static/img/face/9.jpg');
-insert into auth_user (`id`,`creator_id`,`usercode`,`password`,`name`,`email`,`photourl`) values ('1-user','0-admin','user','123456','使用人','yangtze_tim@163.com','/static/img/face/1.jpg');
+insert into auth_user (`id`,`creator_id`,`usercode`,`password`,`name`,`email`,`photourl`) values ('0-admin','0-admin','admin','e10adc3949ba59abbe56e057f20f883e','系统管理员','timjob@163.com','/static/img/face/9.jpg');
+insert into auth_user (`id`,`creator_id`,`usercode`,`password`,`name`,`email`,`photourl`) values ('1-user','0-admin','user','e10adc3949ba59abbe56e057f20f883e','使用人','yangtze_tim@163.com','/static/img/face/1.jpg');
 
 -- 角色
 insert into auth_role (`id`,`creator_id`,`name`,`remark`) values ('0-role-admin','0-admin','系统管理员组','系统预置角色');
