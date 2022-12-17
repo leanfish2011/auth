@@ -41,7 +41,10 @@ function build_image()
     echo "清理"$(pwd)
 
     # 构建
+    echo "当前目录："$(pwd)
     cd ../
+
+    echo "构建目录："$(pwd)
     mvn package
     echo "构建完成"
 
