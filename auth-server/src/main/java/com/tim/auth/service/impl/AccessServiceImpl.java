@@ -87,7 +87,7 @@ public class AccessServiceImpl implements AccessService {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
       log.warn("token为空");
-      throw new NotFoundException("token为空！");
+      return true;
     }
 
     tokenManager.deleteToken(token);
@@ -99,7 +99,7 @@ public class AccessServiceImpl implements AccessService {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
       log.warn("token为空");
-      throw new NotFoundException("token为空！");
+      throw new NotFoundException("登录信息为空！");
     }
 
     TokenModel tokenModel = tokenManager.getTokenModel(token);
@@ -150,7 +150,7 @@ public class AccessServiceImpl implements AccessService {
     String token = requestManager.getAccessToken();
     if (StringUtils.isEmpty(token)) {
       log.warn("token为空");
-      throw new NotFoundException("token为空！");
+      throw new NotFoundException("登录信息为空！");
     }
 
     boolean isExist = tokenManager.checkToken(token);
