@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @SpringBootApplication
 @MapperScan("com.tim.auth.dao")
+@EnableFeignClients("com.tim")
 public class AuthApplication {
 
   public static void main(String[] args) {

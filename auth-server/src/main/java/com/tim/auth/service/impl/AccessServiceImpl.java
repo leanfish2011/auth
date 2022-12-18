@@ -10,6 +10,7 @@ import com.tim.auth.exception.BadParameterException;
 import com.tim.auth.exception.DuplicateException;
 import com.tim.auth.exception.InvalidTokenException;
 import com.tim.auth.exception.NotFoundException;
+import com.tim.auth.sdk.vo.FindReq;
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.common.AuthCode;
 import com.tim.auth.component.RequestManager;
@@ -28,10 +29,13 @@ import com.tim.auth.sdk.vo.RegisterReq;
 import com.tim.auth.sdk.vo.RoleUserAdd;
 import com.tim.auth.sdk.vo.UpdatePwdReq;
 import com.tim.auth.sdk.vo.UserSearchResp;
+import com.tim.system.sdk.feign.MailFeignClient;
+import com.tim.system.sdk.po.MailReq;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +67,9 @@ public class AccessServiceImpl implements AccessService {
 
   @Autowired
   private LoadResourceRole loadResourceRole;
+
+  @Autowired
+  private MailFeignClient mailFeignClient;
 
   @Override
   public LoginResp login(LoginReq loginReq) {
@@ -232,7 +239,7 @@ public class AccessServiceImpl implements AccessService {
     //注册
     RegisterReq registerReq = new RegisterReq();
     registerReq.setUserCode(githubUser.getLogin());
-    registerReq.setPassword(UserInfoConstant.USER_PASSWORD);
+    registerReq.setPassword(DigestUtils.md5Hex(UserInfoConstant.USER_PASSWORD));
     registerReq.setName(githubUser.getName());
     registerReq.setEmail(githubUser.getEmail());
     registerReq.setPhotourl(githubUser.getAvatarUrl());
@@ -246,6 +253,52 @@ public class AccessServiceImpl implements AccessService {
     }
 
     throw new BadParameterException("GitHub登录失败");
+  }
+
+  @Override
+  public Boolean findLogin(FindReq findReq) {
+    String userCode = findReq.getUserCode();
+    User user = userService.findOne(userCode);
+    if (user == null) {
+      log.warn("用户不存在，用户名：{}", userCode);
+      throw new NotFoundException("用户不存在！");
+    }
+
+    String email = findReq.getEmail();
+    if (!user.getEmail().equals(email)) {
+      log.warn("用户名或者邮箱错误，用户名：{}，邮箱：{}", userCode, email);
+      throw new BadParameterException("用户名或者邮箱错误！");
+    }
+
+    //重置密码
+    String newPwd = getRandomPwd();
+    user.setPassword(DigestUtils.md5Hex(newPwd));
+    user.setModifierId(tokenManager.getUserId());
+
+    userMapper.updateByPrimaryKeySelective(user);
+
+    //发送邮件
+    String title = "爱收藏找回登录密码";
+    StringBuilder stringBuilderContent = new StringBuilder();
+    stringBuilderContent.append("用户名：" + userCode + "<br />");
+    stringBuilderContent.append("新密码：" + newPwd + "<br />");
+    stringBuilderContent.append("<br />");
+    stringBuilderContent.append("请及时修改密码！" + "<br />");
+
+    MailReq mailReq = new MailReq();
+    mailReq.setTo(user.getEmail());
+    mailReq.setSubject(title);
+    mailReq.setContent(stringBuilderContent.toString());
+
+    mailFeignClient.post(mailReq);
+    log.info("爱收藏" + userCode + "找回登录密码邮件发送成功");
+
+    return true;
+  }
+
+  private String getRandomPwd() {
+    UUID randomUUID = UUID.randomUUID();
+    return randomUUID.toString().replaceAll("-", "").substring(0, 8);
   }
 
   /**

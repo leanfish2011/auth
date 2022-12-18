@@ -1,5 +1,6 @@
 package com.tim.auth.service;
 
+import com.tim.auth.sdk.vo.FindReq;
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.sdk.vo.LoginReq;
 import com.tim.auth.sdk.vo.LoginResp;
@@ -42,4 +43,9 @@ public interface AccessService {
    * @return 登录结果
    */
   LoginResp githubLogin(String code) throws Exception;
+
+  /**
+   * 找回用户登录密码
+   */
+  Boolean findLogin(FindReq findReq);
 }
