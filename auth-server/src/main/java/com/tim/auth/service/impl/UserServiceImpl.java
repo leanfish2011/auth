@@ -2,12 +2,12 @@ package com.tim.auth.service.impl;
 
 import com.tim.auth.component.LoadResourceRole;
 import com.tim.auth.component.TokenManager;
-import com.tim.auth.exception.DuplicateException;
 import com.tim.auth.exception.NotModifyException;
 import com.tim.auth.sdk.constant.AuthConstant;
+import com.tim.auth.sdk.vo.RegisterReq;
+import com.tim.auth.service.AccessService;
 import com.tim.auth.service.RoleUserService;
 import com.tim.auth.service.UserService;
-import com.tim.auth.sdk.vo.RoleUserAdd;
 import com.tim.auth.sdk.vo.UserAdd;
 import com.tim.auth.sdk.vo.UserSearchReq;
 import com.tim.auth.sdk.vo.UserSearchResp;
@@ -16,7 +16,6 @@ import com.tim.auth.sdk.vo.UserUpdate;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -43,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private LoadResourceRole loadResourceRole;
+
+  @Autowired
+  private AccessService accessService;
 
   @Override
   public UserSearchRespData search(UserSearchReq userSearchReq) {
@@ -110,35 +112,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Boolean add(UserAdd userAdd) {
-    String userCode = userAdd.getUserCode();
-    boolean isExist = isExist(userCode);
-    if (isExist) {
-      log.warn("用户名已经存在：{}", userCode);
-      throw new DuplicateException("该用户名已经存在！");
-    }
+    RegisterReq registerReq = new RegisterReq();
+    BeanUtils.copyProperties(userAdd, registerReq);
 
-    //插入用户
-    User user = new User();
-    BeanUtils.copyProperties(userAdd, user);
-    String userId = UUID.randomUUID().toString();
-    user.setId(userId);
-    user.setCreatorId(tokenManager.getUserId());
-
-    userMapper.insertSelective(user);
-
-    //插入默认角色
-    RoleUserAdd roleUserAdd = new RoleUserAdd();
-    roleUserAdd.setRoleId(AuthConstant.ROLE_COMMON_ID);
-    List<String> userIdList = new ArrayList<>(1);
-    userIdList.add(userId);
-    roleUserAdd.setUserIdList(userIdList);
-    roleUserService.addUser(roleUserAdd);
-
-    //刷新redis
-    loadResourceRole.load();
-
-    log.info("新增用户成功，用户名：{}", userCode);
-    return true;
+    return accessService.register(registerReq);
   }
 
   @Override

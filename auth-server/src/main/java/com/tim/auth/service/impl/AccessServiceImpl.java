@@ -127,8 +127,6 @@ public class AccessServiceImpl implements AccessService {
       throw new DuplicateException("该用户名已经存在！");
     }
 
-    //TODO 与后端新增用户代码重复
-
     //插入用户
     User user = new User();
     BeanUtils.copyProperties(registerReq, user);
