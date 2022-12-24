@@ -270,7 +270,7 @@ public class AccessServiceImpl implements AccessService {
 
     //重置密码
     String newPwd = getRandomPwd();
-    user.setPassword(DigestUtils.md5Hex(newPwd));
+    user.setPassword(DigestUtils.md5Hex(newPwd + userCode));
     user.setModifierId(tokenManager.getUserId());
 
     userMapper.updateByPrimaryKeySelective(user);
