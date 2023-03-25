@@ -1,4 +1,4 @@
-package com.tim.auth.vo;
+package com.tim.auth.sdk.vo;
 
 import java.util.Date;
 import lombok.Data;

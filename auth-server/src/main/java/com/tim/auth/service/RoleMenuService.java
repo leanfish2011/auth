@@ -1,7 +1,7 @@
 package com.tim.auth.service;
 
-import com.tim.auth.vo.RoleMenuAdd;
-import com.tim.auth.vo.RoleMenuDel;
+import com.tim.auth.sdk.vo.RoleMenuAdd;
+import com.tim.auth.sdk.vo.RoleMenuDel;
 
 public interface RoleMenuService {
 

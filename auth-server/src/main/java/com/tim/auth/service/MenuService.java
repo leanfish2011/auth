@@ -1,6 +1,6 @@
 package com.tim.auth.service;
 
-import com.tim.auth.vo.MenuTree;
+import com.tim.auth.sdk.vo.MenuTree;
 import java.util.List;
 
 /**

@@ -1,11 +1,11 @@
 package com.tim.auth.service;
 
-import com.tim.auth.vo.UserAdd;
-import com.tim.auth.vo.UserSearchRespData;
-import com.tim.auth.vo.UserUpdate;
+import com.tim.auth.sdk.vo.UserAdd;
+import com.tim.auth.sdk.vo.UserSearchRespData;
+import com.tim.auth.sdk.vo.UserUpdate;
 import java.util.List;
-import com.tim.auth.vo.UserSearchReq;
-import com.tim.auth.vo.UserSearchResp;
+import com.tim.auth.sdk.vo.UserSearchReq;
+import com.tim.auth.sdk.vo.UserSearchResp;
 import com.tim.auth.po.User;
 
 public interface UserService {

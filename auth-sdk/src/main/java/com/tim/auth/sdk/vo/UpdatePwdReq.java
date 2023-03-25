@@ -1,4 +1,4 @@
-package com.tim.auth.vo;
+package com.tim.auth.sdk.vo;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;

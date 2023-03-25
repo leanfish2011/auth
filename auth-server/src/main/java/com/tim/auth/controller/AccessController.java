@@ -1,11 +1,12 @@
 package com.tim.auth.controller;
 
+import com.tim.auth.sdk.vo.FindReq;
 import com.tim.auth.sdk.vo.TokenModel;
 import com.tim.auth.service.AccessService;
-import com.tim.auth.vo.LoginReq;
+import com.tim.auth.sdk.vo.LoginReq;
 import com.tim.auth.sdk.vo.LoginResp;
-import com.tim.auth.vo.RegisterReq;
-import com.tim.auth.vo.UpdatePwdReq;
+import com.tim.auth.sdk.vo.RegisterReq;
+import com.tim.auth.sdk.vo.UpdatePwdReq;
 import com.tim.message.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
  * @author tim
  * @time 2018-05-27 19:30:26
  */
-@Api(description = "账号管理")
+@Api(tags = "账号管理")
 @RestController
 @RequestMapping("${api.version.module}/access")
 @Slf4j
@@ -88,6 +89,12 @@ public class AccessController {
   @GetMapping("/login/github")
   public Message<LoginResp> githubLogin(String code) throws Exception {
     return Message.success(accessService.githubLogin(code));
+  }
+
+  @ApiOperation(value = "找回密码")
+  @PostMapping("/find")
+  public Message findLogin(@RequestBody FindReq findReq) {
+    return Message.success(accessService.findLogin(findReq));
   }
 
 }

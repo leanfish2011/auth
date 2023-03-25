@@ -1,7 +1,7 @@
 package com.tim.auth.controller;
 
 import com.tim.auth.service.MenuService;
-import com.tim.auth.vo.MenuTree;
+import com.tim.auth.sdk.vo.MenuTree;
 import com.tim.message.Message;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

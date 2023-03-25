@@ -1,11 +1,11 @@
 package com.tim.auth.controller;
 
 import com.tim.auth.service.UserService;
-import com.tim.auth.vo.UserAdd;
-import com.tim.auth.vo.UserSearchReq;
-import com.tim.auth.vo.UserSearchResp;
-import com.tim.auth.vo.UserSearchRespData;
-import com.tim.auth.vo.UserUpdate;
+import com.tim.auth.sdk.vo.UserAdd;
+import com.tim.auth.sdk.vo.UserSearchReq;
+import com.tim.auth.sdk.vo.UserSearchResp;
+import com.tim.auth.sdk.vo.UserSearchRespData;
+import com.tim.auth.sdk.vo.UserUpdate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

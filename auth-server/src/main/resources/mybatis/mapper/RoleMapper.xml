@@ -78,7 +78,7 @@
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from sys_role
+    from auth_role
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,31 +87,31 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
-    from sys_role
+    from auth_role
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from sys_role
+    delete from auth_role
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.tim.auth.po.RoleExample" >
-    delete from sys_role
+    delete from auth_role
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.tim.auth.po.Role" >
-    insert into sys_role (id, create_time, creator_id, 
-      modified_time, modifier_id, name, 
+    insert into auth_role (id, create_time, creator_id,
+      modified_time, modifier_id, name,
       remark)
-    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR},
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tim.auth.po.Role" >
-    insert into sys_role
+    insert into auth_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -160,13 +160,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.tim.auth.po.RoleExample" resultType="java.lang.Integer" >
-    select count(*) from sys_role
+    select count(*) from auth_role
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update sys_role
+    update auth_role
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=VARCHAR},
@@ -195,7 +195,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update sys_role
+    update auth_role
     set id = #{record.id,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       creator_id = #{record.creatorId,jdbcType=VARCHAR},
@@ -208,7 +208,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tim.auth.po.Role" >
-    update sys_role
+    update auth_role
     <set >
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -232,7 +232,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tim.auth.po.Role" >
-    update sys_role
+    update auth_role
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       creator_id = #{creatorId,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
